@@ -8,7 +8,6 @@ type FavoritesProps = {
 }
 
 function Favorites({ offersInfo }: FavoritesProps): JSX.Element {
-  const FavoriteOffers: OfferInfo[] = offersInfo.filter((offer) => offer.isFavorite);
   return (
     <div className="page">
       <header className="header">
@@ -44,7 +43,7 @@ function Favorites({ offersInfo }: FavoritesProps): JSX.Element {
         <div className="page__favorites-container container">
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
-            <FavoriteCardList offers={FavoriteOffers}/>
+            <FavoriteCardList offers={offersInfo}/>
           </section>
         </div>
       </main>

@@ -5,15 +5,16 @@ function CommentForm(): JSX.Element {
   const {rating, text, isDisabled} = commentInfo;
 
   const handleRatingChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    evt.stopPropagation();
-    const {value} = evt.target as HTMLInputElement;
-    setCommentInfo({...commentInfo, rating: parseInt(value, 10), isDisabled: false});
+    setCommentInfo({...commentInfo, rating: parseInt(evt.target.value, 10)});
+    const submitState = rating !== 0 && text.length >= 50;
+    setCommentInfo({...commentInfo, isDisabled: submitState});
   };
 
   const handleTextChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     evt.preventDefault();
-    const {value} = evt.target as HTMLTextAreaElement;
-    setCommentInfo({...commentInfo, text: value});
+    setCommentInfo({...commentInfo, text: evt.target.value});
+    const submitState = rating !== 0 && text.length >= 50;
+    setCommentInfo({...commentInfo, isDisabled: submitState});
   };
 
   return (
