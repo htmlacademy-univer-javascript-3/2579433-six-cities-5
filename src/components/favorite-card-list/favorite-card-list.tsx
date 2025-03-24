@@ -1,5 +1,4 @@
 import { OfferInfo } from '../../types/offer';
-import React from 'react';
 import FavoriteCard from '../favorite-card/favorite-card';
 
 type FavoriteCardListProps = {
@@ -22,14 +21,7 @@ function FavoriteCardList({offers}: FavoriteCardListProps): JSX.Element {
               </div>
             </div>
             <div className="favorites__places">
-              {currentFavoriteOffers.map((offer, id) => {
-                const key = `${id}-card`;
-                return (
-                  <React.Fragment key={key}>
-                    <FavoriteCard offerInfo={offer}/>
-                  </React.Fragment>);
-              }
-              )}
+              {currentFavoriteOffers.map((offer) => <FavoriteCard key={`${offer.id}-card`} offerInfo={offer}/>)}
             </div>
           </li>
         );

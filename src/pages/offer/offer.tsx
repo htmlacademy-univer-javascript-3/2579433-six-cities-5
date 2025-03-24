@@ -53,15 +53,15 @@ function Offer(): JSX.Element {
           </div>
           <div className="offer__container container">
             <div className="offer__wrapper">
-              { isPremium ?
+              { isPremium &&
                 <div className="offer__mark">
                   <span>Premium</span>
-                </div> : ''}
+                </div>}
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">
                   {title}
                 </h1>
-                <button className={`place-card__bookmark-button ${isFavorite ? 'place-card__bookmark-button--active' : ''} button`} type="button">
+                <button className={`place-card__bookmark-button ${isFavorite && 'place-card__bookmark-button--active'} button`} type="button">
                   <svg className="offer__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>
@@ -146,7 +146,7 @@ function Offer(): JSX.Element {
                     </div>
                   </li>
                 </ul>
-                <CommentForm></CommentForm>
+                <CommentForm/>
               </section>
             </div>
           </div>
