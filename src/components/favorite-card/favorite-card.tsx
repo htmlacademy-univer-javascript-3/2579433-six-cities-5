@@ -3,11 +3,11 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
 
-type CardProps = {
+type FavoriteCardProps = {
   offerInfo: OfferInfo;
 }
 
-function Card({offerInfo}: CardProps): JSX.Element {
+function FavoriteCard({offerInfo}: FavoriteCardProps): JSX.Element {
   const [cardInfo, setCardInfo] = useState({...offerInfo, isActive: false});
   const {id, title, type, price, isFavorite, isPremium, rating, previewImage} = cardInfo;
 
@@ -20,17 +20,17 @@ function Card({offerInfo}: CardProps): JSX.Element {
   };
 
   return (
-    <article className="cities__card place-card" onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+    <article className="favorites__card place-card" onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
       { isPremium ?
         <div className="place-card__mark">
           <span>Premium</span>
         </div> : ''}
-      <div className="cities__image-wrapper place-card__image-wrapper">
+      <div className="favorites__image-wrapper place-card__image-wrapper">
         <Link to={`${AppRoute.Offer}${id}`}>
-          <img className="place-card__image" src={previewImage} width="260" height="200" alt="Place image" />
+          <img className="place-card__image" src={previewImage} width="150" height="110" alt="Place image" />
         </Link>
       </div>
-      <div className="place-card__info">
+      <div className="favorites__card-info place-card__info">
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">&euro;{price}</b>
@@ -58,4 +58,4 @@ function Card({offerInfo}: CardProps): JSX.Element {
   );
 }
 
-export default Card;
+export default FavoriteCard;

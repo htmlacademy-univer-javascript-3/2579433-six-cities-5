@@ -4,8 +4,8 @@ import { AppRoute } from '../../const';
 function NotFound(): JSX.Element {
   return(
     <>
-      <p>404 Not Found</p>
-      <Link className="back_to_main" to={AppRoute.Main}>Back to main page</Link>
+      <h1>404 Not Found</h1>
+      <Link to={AppRoute.Main}>Back to main page</Link>
     </>
   );
 }
