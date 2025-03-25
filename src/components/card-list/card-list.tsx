@@ -7,7 +7,7 @@ type CardListProps = {
 }
 
 function CardList({offers}: CardListProps): JSX.Element {
-  const [activeCard, setActiveCard] = useState('');
+  const [activeCard, setActiveCard] = useState<string | null>(null);
 
   const handleMouseOver = (evt: React.MouseEvent<HTMLElement>) => {
     const {id} = evt.currentTarget;
@@ -15,7 +15,7 @@ function CardList({offers}: CardListProps): JSX.Element {
   };
 
   const handleMouseOut = () => {
-    setActiveCard('');
+    setActiveCard(null);
   };
 
   return (

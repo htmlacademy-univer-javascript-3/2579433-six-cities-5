@@ -5,11 +5,9 @@ import { AppRoute } from '../../const';
 
 type FavoriteCardProps = {
   offerInfo: OfferInfo;
-  onMouseOver: (evt: React.MouseEvent<HTMLElement>) => void;
-  onMouseOut: (evt: React.MouseEvent<HTMLElement>) => void;
 }
 
-function FavoriteCard({offerInfo, onMouseOver, onMouseOut}: FavoriteCardProps): JSX.Element {
+function FavoriteCard({offerInfo}: FavoriteCardProps): JSX.Element {
   const [isFavorite, setIsFavorite] = useState(offerInfo.isFavorite);
   const {id, title, type, price, isPremium, rating, previewImage} = offerInfo;
 
@@ -19,7 +17,7 @@ function FavoriteCard({offerInfo, onMouseOver, onMouseOut}: FavoriteCardProps): 
   };
 
   return (
-    <article className="favorites__card place-card" id={id} onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
+    <article className="favorites__card place-card" id={id}>
       { isPremium &&
         <div className="place-card__mark">
           <span>Premium</span>

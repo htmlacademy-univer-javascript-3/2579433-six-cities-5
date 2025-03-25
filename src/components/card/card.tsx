@@ -13,8 +13,7 @@ function Card({offerInfo, onMouseOver, onMouseOut}: CardProps): JSX.Element {
   const [isFavorite, setIsFavorite] = useState(offerInfo.isFavorite);
   const {id, title, type, price, isPremium, rating, previewImage} = offerInfo;
 
-  const handleBookmarkClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
-    evt.preventDefault();
+  const handleBookmarkClick = () => {
     setIsFavorite((currentState) => !currentState);
   };
 

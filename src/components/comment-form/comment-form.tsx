@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
 
 function CommentForm(): JSX.Element {
-  const [commentInfo, setCommentInfo] = useState({rating: 0, text: '', isDisabled: true});
-  const {rating, text, isDisabled} = commentInfo;
+  const [commentInfo, setCommentInfo] = useState({rating: 0, text: ''});
+  const {rating, text} = commentInfo;
 
   const handleRatingChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setCommentInfo({...commentInfo, rating: parseInt(evt.target.value, 10)});
-    const submitState = rating !== 0 && text.length >= 50;
-    setCommentInfo({...commentInfo, isDisabled: submitState});
   };
 
   const handleTextChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     evt.preventDefault();
     setCommentInfo({...commentInfo, text: evt.target.value});
-    const submitState = rating !== 0 && text.length >= 50;
-    setCommentInfo({...commentInfo, isDisabled: submitState});
   };
 
   return (
@@ -62,7 +58,7 @@ function CommentForm(): JSX.Element {
         <p className="reviews__help">
                       To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
-        <button className="reviews__submit form__submit button" type="submit" disabled={isDisabled}>Submit</button>
+        <button className="reviews__submit form__submit button" type="submit" disabled={rating !== 0 && text.length >= 50}>Submit</button>
       </div>
     </form>
   );
