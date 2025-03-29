@@ -7,6 +7,11 @@ function useMap(mapRef: MutableRefObject<HTMLElement | null>, city: OfferCity): 
   const isRenderedRef = useRef<boolean>(false);
 
   useEffect(() => {
+    const url = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+    const attribution = { attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    };
+
     if (mapRef.current !== null && !isRenderedRef.current) {
       const instance = new Map(mapRef.current, {
         center: {
@@ -16,13 +21,7 @@ function useMap(mapRef: MutableRefObject<HTMLElement | null>, city: OfferCity): 
         zoom: 10
       });
 
-      const layer = new TileLayer(
-        'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-        {
-          attribution:
-             '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-        }
-      );
+      const layer = new TileLayer(url, attribution);
 
       instance.addLayer(layer);
 
