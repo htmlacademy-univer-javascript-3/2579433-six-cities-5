@@ -4,7 +4,7 @@ type CityLocation = {
   zoom: number;
 };
 
-type OfferCity = {
+export type OfferCity = {
   name: string;
   location: CityLocation;
 };
@@ -51,3 +51,8 @@ export type FullOfferInfo = {
   images: string[];
   maxAdults: number;
 };
+
+export type PointInfo = {
+  id: string;
+  location: OfferLocation;
+}
