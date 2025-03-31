@@ -1,9 +1,5 @@
 import { Icon } from 'leaflet';
 
-export const SETTING = {
-  places: 321
-};
-
 export enum AppRoute {
   Favorites = '/favorites',
   Login = '/login',
@@ -15,6 +11,12 @@ export enum AuthorizationStatus {
   Auth = 'AUTH',
   NoAuth = 'NO_AUTH',
   Unknown = 'UNKNOWN',
+}
+
+export enum Display {
+  FAVORITE = 'favorites',
+  NEAR = 'near-places',
+  REGULAR = 'cities'
 }
 
 export const defaultCustomIcon = new Icon({

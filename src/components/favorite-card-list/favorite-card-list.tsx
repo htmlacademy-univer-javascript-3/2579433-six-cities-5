@@ -1,5 +1,5 @@
 import { OfferInfo } from '../../types/offer';
-import FavoriteCardGroup from '../favorite-card-group/favorite-card-group';
+import FavoriteCardGroup from './favorite-card-group/favorite-card-group';
 
 type FavoriteCardListProps = {
   offers: OfferInfo[];

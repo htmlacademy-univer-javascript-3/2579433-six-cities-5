@@ -1,5 +1,6 @@
 import CardList from '../../components/card-list/card-list';
 import { OfferInfo, PointInfo } from '../../types/offer';
+import { Display } from '../../const';
 import Map from '../../components/map/map';
 
 type MainProps = {
@@ -97,7 +98,7 @@ function Main({ offersInfo }: MainProps): JSX.Element {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <CardList offers={offersInfo}/>
+              <CardList display={Display.REGULAR} offers={offersInfo}/>
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
