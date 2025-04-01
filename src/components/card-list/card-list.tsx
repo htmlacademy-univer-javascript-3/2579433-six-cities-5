@@ -1,12 +1,17 @@
 import { OfferInfo } from '../../types/offer';
-import Card from '../card/card';
 import { useState } from 'react';
+import { Display } from '../../const';
+import CardWrapper from '../card/wrapper/card-wrapper';
+import CardLabel from '../card/label/card-label';
+import CardImage from '../card/image/card-image';
+import CardInfo from '../card/info/card-info';
 
 type CardListProps = {
+  display : Display;
   offers: OfferInfo[];
 }
 
-function CardList({offers}: CardListProps): JSX.Element {
+function CardList({display, offers}: CardListProps): JSX.Element {
   const [activeCard, setActiveCard] = useState<string | null>(null);
 
   const handleMouseOver = (evt: React.MouseEvent<HTMLElement>) => {
@@ -21,7 +26,16 @@ function CardList({offers}: CardListProps): JSX.Element {
   return (
     <div className="cities__places-list places__list tabs__content">
       <p className="visually-hidden">{activeCard}</p>
-      {offers.map((offer) => <Card key={`${offer.id}-card`} offerInfo={offer} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}/>)}
+      {offers.map((offer) => {
+        const shortCardInfo = {id: offer.id, title: offer.title, type: offer.type, price: offer.price, rating: offer.rating, isFavorite: offer.isFavorite};
+
+        return (
+          <CardWrapper key={`${offer.id}-card`} display={display} id={offer.id} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+            <CardLabel isPremium={offer.isPremium}/>
+            <CardImage display={display} offerID={offer.id} previewImage={offer.previewImage}/>
+            <CardInfo display={display} shortCardInfo={shortCardInfo}/>
+          </CardWrapper>);
+      })}
     </div>
   );
 }
