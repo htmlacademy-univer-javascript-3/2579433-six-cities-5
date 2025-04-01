@@ -1,23 +1,20 @@
 import { Link } from 'react-router-dom';
 import { AppRoute, Display } from '../../../const';
 
-type ImageInfo = {
-  id: string;
+type CardImageProps = {
+  display: Display;
+  offerID: string;
   previewImage: string;
 }
 
-type CardImageProps = {
-  display: Display;
-  imageInfo: ImageInfo;
-}
-
-function CardImage({display, imageInfo}: CardImageProps): JSX.Element {
-  const {id, previewImage} = imageInfo;
+function CardImage({display, offerID, previewImage}: CardImageProps): JSX.Element {
+  const width = display === Display.FAVORITE ? '150' : '260';
+  const heigth = display === Display.FAVORITE ? '110' : '200';
 
   return (
     <div className={`${display}__image-wrapper place-card__image-wrapper`}>
-      <Link to={`${AppRoute.Offer}:${id}`}>
-        <img className="place-card__image" src={previewImage} width="260" height="200" alt="Place image" />
+      <Link to={`${AppRoute.Offer}:${offerID}`}>
+        <img className="place-card__image" src={previewImage} width={width} height={heigth} alt="Place image" />
       </Link>
     </div>
   );

@@ -28,12 +28,11 @@ function CardList({display, offers}: CardListProps): JSX.Element {
       <p className="visually-hidden">{activeCard}</p>
       {offers.map((offer) => {
         const shortCardInfo = {id: offer.id, title: offer.title, type: offer.type, price: offer.price, rating: offer.rating, isFavorite: offer.isFavorite};
-        const imageInfo = {id: offer.id, previewImage: offer.previewImage};
 
         return (
           <CardWrapper key={`${offer.id}-card`} display={display} id={offer.id} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
             <CardLabel isPremium={offer.isPremium}/>
-            <CardImage display={display} imageInfo={imageInfo}/>
+            <CardImage display={display} offerID={offer.id} previewImage={offer.previewImage}/>
             <CardInfo display={display} shortCardInfo={shortCardInfo}/>
           </CardWrapper>);
       })}

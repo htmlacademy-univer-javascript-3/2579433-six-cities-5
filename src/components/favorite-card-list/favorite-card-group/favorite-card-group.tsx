@@ -24,12 +24,11 @@ function FavoriteCardGroup({city, currentFavoriteOffers}: CardGroupProps): JSX.E
       <div className="favorites__places">
         {currentFavoriteOffers.map((offer) => {
           const shortCardInfo = {id: offer.id, title: offer.title, type: offer.type, price: offer.price, rating: offer.rating, isFavorite: offer.isFavorite};
-          const imageInfo = {id: offer.id, previewImage: offer.previewImage};
 
           return (
-            <CardWrapper key={`${offer.id}-card`} display={Display.FAVORITE} id={offer.id} onMouseOver={() => {}} onMouseOut={() => {}}>
+            <CardWrapper key={`${offer.id}-card`} display={Display.FAVORITE} id={offer.id}>
               <CardLabel isPremium={offer.isPremium}/>
-              <CardImage display={Display.FAVORITE} imageInfo={imageInfo}/>
+              <CardImage display={Display.FAVORITE} offerID={offer.id} previewImage={offer.previewImage}/>
               <CardInfo display={Display.FAVORITE} shortCardInfo={shortCardInfo}/>
             </CardWrapper>);
         })}
