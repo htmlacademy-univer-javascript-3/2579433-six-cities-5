@@ -1,13 +1,11 @@
 import FavoriteCardList from '../../components/favorite-card-list/favorite-card-list';
-import { OfferInfo } from '../../types/offer';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
+import { useAppSelector } from '../../hooks';
 
-type FavoritesProps = {
-  offersInfo: OfferInfo[];
-}
+function Favorites(): JSX.Element {
+  const offerList = useAppSelector((state) => state.offerList);
 
-function Favorites({ offersInfo }: FavoritesProps): JSX.Element {
   return (
     <div className="page">
       <header className="header">
@@ -43,7 +41,7 @@ function Favorites({ offersInfo }: FavoritesProps): JSX.Element {
         <div className="page__favorites-container container">
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
-            <FavoriteCardList offers={offersInfo}/>
+            <FavoriteCardList offers={offerList}/>
           </section>
         </div>
       </main>

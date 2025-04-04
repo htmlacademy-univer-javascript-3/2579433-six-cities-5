@@ -1,14 +1,29 @@
 import CardList from '../../components/card-list/card-list';
 import { OfferInfo, PointInfo } from '../../types/offer';
-import { Display } from '../../const';
+import { Display, CITIES } from '../../const';
 import Map from '../../components/map/map';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { changeCity, fillOfferList } from '../../store/action';
+import { useEffect } from 'react';
+import { offers } from '../../mock/offers';
 
-type MainProps = {
-  offersInfo: OfferInfo[];
-}
+function Main(): JSX.Element {
 
-function Main({ offersInfo }: MainProps): JSX.Element {
-  const points: PointInfo[] = offersInfo.map((offer) => ({id: offer.id, location: offer.location}));
+  const city = useAppSelector((state) => state.city);
+  const offerList = useAppSelector((state) => state.offerList);
+  const dispatch = useAppDispatch();
+  const handleCityChange = (newCity: string) => {
+    dispatch(changeCity(newCity));
+  };
+
+  useEffect(() => {
+    dispatch(fillOfferList(offers));
+  }, [dispatch, city]);
+
+  const filteredOffers: OfferInfo[] = offerList.filter((offer) => offer.city.name === city);
+  const points: PointInfo[] = filteredOffers.map((offer) => ({id: offer.id, location: offer.location}));
+  const cityNames = CITIES.map((info) => info.name);
+
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -45,36 +60,18 @@ function Main({ offersInfo }: MainProps): JSX.Element {
         <div className="tabs">
           <section className="locations container">
             <ul className="locations__list tabs__list">
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Paris</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Cologne</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Brussels</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item tabs__item--active">
-                  <span>Amsterdam</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Hamburg</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Dusseldorf</span>
-                </a>
-              </li>
+              {cityNames.map((name) =>(
+                <li className="locations__item" key={name}>
+                  <a
+                    className={`locations__item-link tabs__item ${name === city ? 'tabs__item--active' : 'href="#"'}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleCityChange(name);
+                    }}
+                  >
+                    <span>{name}</span>
+                  </a>
+                </li>))}
             </ul>
           </section>
         </div>
@@ -82,7 +79,7 @@ function Main({ offersInfo }: MainProps): JSX.Element {
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{offersInfo.length} places to stay in Amsterdam</b>
+              <b className="places__found">{filteredOffers.length} places to stay in {city}</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -98,11 +95,11 @@ function Main({ offersInfo }: MainProps): JSX.Element {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <CardList display={Display.REGULAR} offers={offersInfo}/>
+              <CardList display={Display.REGULAR} offers={filteredOffers}/>
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
-                <Map city={offersInfo[0].city} points={points} selectedPoint={null} />
+                <Map city={CITIES.find((info) => city === info.name) || CITIES[0]} points={points} selectedPoint={null} />
               </section>
             </div>
           </div>
