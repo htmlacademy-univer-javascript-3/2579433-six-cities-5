@@ -2,7 +2,7 @@ import CardList from '../../components/card-list/card-list';
 import { OfferInfo, PointInfo } from '../../types/offer';
 import { Display, CITIES } from '../../const';
 import Map from '../../components/map/map';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 import { changeCity, fillOfferList } from '../../store/action';
 import { useEffect } from 'react';
 import { offers } from '../../mock/offers';

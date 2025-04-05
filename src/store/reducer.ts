@@ -2,9 +2,14 @@ import { createReducer } from '@reduxjs/toolkit';
 import * as Action from './action';
 import { OfferInfo } from '../types/offer';
 
-const initialState = {
+type InitialState = {
+  city: string;
+  offerList: OfferInfo[];
+}
+
+const initialState: InitialState = {
   city: 'Paris',
-  offerList: [] as Array<OfferInfo>
+  offerList: []
 };
 
 const reducer = createReducer(initialState, (builder) => {
