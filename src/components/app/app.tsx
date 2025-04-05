@@ -6,26 +6,20 @@ import NotFound from '../../pages/notFound/notFound';
 import { AppRoute, AuthorizationStatus } from '../../const.ts';
 import PrivateRoute from '../private-route/private-route.tsx';
 import {Route, BrowserRouter, Routes} from 'react-router-dom';
-import { OfferInfo } from '../../types/offer.ts';
 
-
-type AppProps = {
-  offersInfo: OfferInfo[];
-}
-
-function App({offersInfo}: AppProps): JSX.Element {
+function App(): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path={AppRoute.Main}
-          element = {<Main offersInfo = {offersInfo}/>}
+          element = {<Main/>}
         />
         <Route
           path={AppRoute.Favorites}
           element = {
             <PrivateRoute authorizationStatus={AuthorizationStatus.NoAuth}>
-              <Favorites offersInfo = {offersInfo}/>
+              <Favorites/>
             </PrivateRoute>
           }
         />
