@@ -19,12 +19,12 @@ export enum Display {
   REGULAR = 'cities'
 }
 
-export const SortType = {
-  POPULAR: 'Popular',
-  LOW_TO_HIGH: 'Price: low to high',
-  HIGH_TO_LOW: 'Price: high to low',
-  TOP_RATED: 'Top rated first'
-};
+export enum SortType {
+  POPULAR = 'Popular',
+  LOW_TO_HIGH = 'Price: low to high',
+  HIGH_TO_LOW = 'Price: high to low',
+  TOP_RATED = 'Top rated first'
+}
 
 export const CITIES = [
   'Paris',

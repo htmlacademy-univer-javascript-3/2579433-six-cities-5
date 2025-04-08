@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { SortType } from '../../const';
 
-type SortProps = {
-  type: string;
-  onSortClick: (arg: string) => void;
+type OfferSortProps = {
+  type: SortType;
+  onSortClick: (sortType: SortType) => void;
 }
 
-function Sort({type, onSortClick}: SortProps): JSX.Element {
+function OfferSort({type, onSortClick}: OfferSortProps): JSX.Element {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const sortTypes = Object.values(SortType);
 
@@ -16,7 +16,7 @@ function Sort({type, onSortClick}: SortProps): JSX.Element {
       setIsOpen((state) => !state);
     }}
     >
-      <span className="places__sorting-caption">Sort by</span>
+      <span className="places__sorting-caption">Sort by </span>
       <span className="places__sorting-type" tabIndex={0}>
         {type}
         <svg className="places__sorting-arrow" width="7" height="4">
@@ -32,4 +32,4 @@ function Sort({type, onSortClick}: SortProps): JSX.Element {
   );
 }
 
-export default Sort;
+export default OfferSort;
