@@ -1,5 +1,4 @@
 import { OfferInfo } from '../../types/offer';
-import { useState } from 'react';
 import { Display } from '../../const';
 import CardWrapper from '../card/wrapper/card-wrapper';
 import CardLabel from '../card/label/card-label';
@@ -9,23 +8,21 @@ import CardInfo from '../card/info/card-info';
 type CardListProps = {
   display : Display;
   offers: OfferInfo[];
+  onPointChange: (value: string | null) => void;
 }
 
-function CardList({display, offers}: CardListProps): JSX.Element {
-  const [activeCard, setActiveCard] = useState<string | null>(null);
-
+function CardList({display, offers, onPointChange}: CardListProps): JSX.Element {
   const handleMouseOver = (evt: React.MouseEvent<HTMLElement>) => {
     const {id} = evt.currentTarget;
-    setActiveCard(id);
+    onPointChange(id);
   };
 
   const handleMouseOut = () => {
-    setActiveCard(null);
+    onPointChange(null);
   };
 
   return (
     <div className="cities__places-list places__list tabs__content">
-      <p className="visually-hidden">{activeCard}</p>
       {offers.map((offer) => {
         const shortCardInfo = {id: offer.id, title: offer.title, type: offer.type, price: offer.price, rating: offer.rating, isFavorite: offer.isFavorite};
 

@@ -12,6 +12,7 @@ import { nearOffersInfo } from '../../mock/nearOffersInfo.ts';
 
 function Offer(): JSX.Element {
   const [cardInfo] = useState({...offer, isActive: false});
+  const [selectedPoint, setSelectedPoint] = useState<string | null>(null);
   const {title, type, price, isFavorite, isPremium, rating, description, bedrooms, goods, host, images, maxAdults} = cardInfo;
   const points: PointInfo[] = nearOffersInfo.map((point) => ({id: point.id, location: point.location}));
 
@@ -135,13 +136,13 @@ function Offer(): JSX.Element {
             </div>
           </div>
           <section className="offer__map map">
-            <Map city={offer.city} points={points} selectedPoint={null} />
+            <Map city={offer.city} points={points} selectedPoint={selectedPoint} />
           </section>
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
-            <CardList display={Display.NEAR} offers={nearOffersInfo}/>
+            <CardList display={Display.NEAR} offers={nearOffersInfo} onPointChange={setSelectedPoint}/>
           </section>
         </div>
       </main>
