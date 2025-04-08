@@ -17,6 +17,7 @@ function Main(): JSX.Element {
   const offerList = useAppSelector((state) => state.offerList);
   const filteredOffers: OfferInfo[] = offerList.filter((offer) => offer.city.name === city);
   const points: PointInfo[] = filteredOffers.map((offer) => ({id: offer.id, location: offer.location}));
+  const [selectedPoint, setSelectedPoint] = useState<string | null>(null);
 
   const handleCityChange = (newCity: string) => {
     dispatch(changeCity(newCity));
@@ -115,11 +116,11 @@ function Main(): JSX.Element {
                   <h2 className="visually-hidden">Places</h2>
                   <b className="places__found">{filteredOffers.length} places to stay in {city}</b>
                   <Sort type={sortType} onSortClick={handleSortChange}/>
-                  <CardList display={Display.REGULAR} offers={filteredOffers}/>
+                  <CardList display={Display.REGULAR} offers={filteredOffers} onPointChange={setSelectedPoint}/>
                 </section>
                 <div className="cities__right-section">
                   <section className="cities__map map">
-                    <Map city={filteredOffers[0].city} points={points} selectedPoint={null} />
+                    <Map city={filteredOffers[0].city} points={points} selectedPoint={selectedPoint} />
                   </section>
                 </div>
               </div>)}
