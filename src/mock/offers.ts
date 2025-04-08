@@ -5,7 +5,7 @@ export const offers: OfferInfo[] = [
     id: '6af6f711-c28d-4121-82cd-e0b462a27f00',
     title: 'Beautiful & luxurious studio at great location',
     type: 'apartment',
-    price: 120,
+    price: 80,
     city: {
       name: 'Amsterdam',
       location: {
@@ -21,7 +21,7 @@ export const offers: OfferInfo[] = [
     },
     isFavorite: true,
     isPremium: true,
-    rating: 4,
+    rating: 5,
     previewImage: 'https://url-to-image/image.png'
   },
   {

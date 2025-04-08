@@ -1,28 +1,50 @@
 import CardList from '../../components/card-list/card-list';
-import { OfferInfo, PointInfo } from '../../types/offer';
-import { Display, CITIES } from '../../const';
 import Map from '../../components/map/map';
+import Sort from '../../components/sort/sort';
+import { OfferInfo, PointInfo } from '../../types/offer';
+import { Display, CITIES, SortType } from '../../const';
+import { sortByRating, sortHighToLow, sortLowToHigh } from '../../utils';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { changeCity, fillOfferList } from '../../store/action';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { offers } from '../../mock/offers';
 
 function Main(): JSX.Element {
 
   const city = useAppSelector((state) => state.city);
-  const offerList = useAppSelector((state) => state.offerList);
   const dispatch = useAppDispatch();
+  const [sortType, setSortType] = useState<string>(SortType.POPULAR);
+  const offerList = useAppSelector((state) => state.offerList);
+  const filteredOffers: OfferInfo[] = offerList.filter((offer) => offer.city.name === city);
+  const points: PointInfo[] = filteredOffers.map((offer) => ({id: offer.id, location: offer.location}));
+
   const handleCityChange = (newCity: string) => {
     dispatch(changeCity(newCity));
+    setSortType(SortType.POPULAR);
   };
 
   useEffect(() => {
     dispatch(fillOfferList(offers));
   }, [dispatch, city]);
 
-  const filteredOffers: OfferInfo[] = offerList.filter((offer) => offer.city.name === city);
-  const points: PointInfo[] = filteredOffers.map((offer) => ({id: offer.id, location: offer.location}));
-  const cityNames = CITIES.map((info) => info.name);
+  const handleSortChange = (newSortType: string) => {
+    setSortType(newSortType);
+    switch (newSortType){
+      case SortType.POPULAR:
+        break;
+      case SortType.HIGH_TO_LOW:
+        filteredOffers.sort(sortHighToLow);
+        break;
+      case SortType.LOW_TO_HIGH:
+        filteredOffers.sort(sortLowToHigh);
+        break;
+      case SortType.TOP_RATED:
+        filteredOffers.sort(sortByRating);
+        break;
+      default:
+        throw new Error('Incorrect sortType');
+    }
+  };
 
   return (
     <div className="page page--gray page--main">
@@ -60,7 +82,7 @@ function Main(): JSX.Element {
         <div className="tabs">
           <section className="locations container">
             <ul className="locations__list tabs__list">
-              {cityNames.map((name) =>(
+              {CITIES.map((name) =>(
                 <li className="locations__item" key={name}>
                   <a
                     className={`locations__item-link tabs__item ${name === city ? 'tabs__item--active' : 'href="#"'}`}
@@ -76,33 +98,31 @@ function Main(): JSX.Element {
           </section>
         </div>
         <div className="cities">
-          <div className="cities__places-container container">
-            <section className="cities__places places">
-              <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{filteredOffers.length} places to stay in {city}</b>
-              <form className="places__sorting" action="#" method="get">
-                <span className="places__sorting-caption">Sort by</span>
-                <span className="places__sorting-type" tabIndex={0}>
-                  Popular
-                  <svg className="places__sorting-arrow" width="7" height="4">
-                    <use xlinkHref="#icon-arrow-select"></use>
-                  </svg>
-                </span>
-                <ul className="places__options places__options--custom places__options--opened">
-                  <li className="places__option places__option--active" tabIndex={0}>Popular</li>
-                  <li className="places__option" tabIndex={0}>Price: low to high</li>
-                  <li className="places__option" tabIndex={0}>Price: high to low</li>
-                  <li className="places__option" tabIndex={0}>Top rated first</li>
-                </ul>
-              </form>
-              <CardList display={Display.REGULAR} offers={filteredOffers}/>
-            </section>
-            <div className="cities__right-section">
-              <section className="cities__map map">
-                <Map city={CITIES.find((info) => city === info.name) || CITIES[0]} points={points} selectedPoint={null} />
-              </section>
-            </div>
-          </div>
+          { filteredOffers.length === 0 ?
+            (
+              <div className="cities__places-container cities__places-container--empty container">
+                <section className="cities__no-places">
+                  <div className="cities__status-wrapper tabs__content">
+                    <b className="cities__status">No places to stay available</b>
+                    <p className="cities__status-description">We could not find any property available at the moment in Dusseldorf</p>
+                  </div>
+                </section>
+                <div className="cities__right-section"></div>
+              </div>) :
+            (
+              <div className="cities__places-container container">
+                <section className="cities__places places">
+                  <h2 className="visually-hidden">Places</h2>
+                  <b className="places__found">{filteredOffers.length} places to stay in {city}</b>
+                  <Sort type={sortType} onSortClick={handleSortChange}/>
+                  <CardList display={Display.REGULAR} offers={filteredOffers}/>
+                </section>
+                <div className="cities__right-section">
+                  <section className="cities__map map">
+                    <Map city={filteredOffers[0].city} points={points} selectedPoint={null} />
+                  </section>
+                </div>
+              </div>)}
         </div>
       </main>
     </div>
