@@ -2,7 +2,9 @@ import './spinner.css';
 
 function Spinner(): JSX.Element {
   return(
-    <p className="spinner">Loading...</p>
+    <div className='overlay'>
+      <p className="spinner">Loading...</p>
+    </div>
   );
 }
 
