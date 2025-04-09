@@ -27,8 +27,17 @@ function useMap(mapRef: MutableRefObject<HTMLElement | null>, city: OfferCity): 
 
       setMap(instance);
       isRenderedRef.current = true;
+    }else{
+      if(map){
+        map.setView({
+          lat: city.location.latitude,
+          lng: city.location.longitude
+        },
+        map.getZoom()
+        );
+      }
     }
-  }, [mapRef, city]);
+  }, [mapRef, map, city]);
 
   return map;
 }
