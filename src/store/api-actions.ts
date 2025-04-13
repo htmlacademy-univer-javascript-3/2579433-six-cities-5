@@ -8,10 +8,10 @@ import {APIRoute} from '../const';
 export const fetchOffersAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch;
   state: State;
-  extra: AxiosInstance;
+  extra: { api: AxiosInstance };
 }>(
   'FETCH_OFFERS',
-  async (_arg, {dispatch, extra: api}) => {
+  async (_arg, {dispatch, extra: {api}}) => {
     try{
       dispatch(setLoadingStatus(true));
       const {data} = await api.get<OfferInfo[]>(APIRoute.Offers);
