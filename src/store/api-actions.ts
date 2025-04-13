@@ -12,9 +12,14 @@ export const fetchOffersAction = createAsyncThunk<void, undefined, {
 }>(
   'FETCH_OFFERS',
   async (_arg, {dispatch, extra: api}) => {
-    dispatch(setLoadingStatus(true));
-    const {data} = await api.get<OfferInfo[]>(APIRoute.Offers);
-    dispatch(setLoadingStatus(false));
-    dispatch(loadOffers(data));
+    try{
+      dispatch(setLoadingStatus(true));
+      const {data} = await api.get<OfferInfo[]>(APIRoute.Offers);
+      dispatch(setLoadingStatus(false));
+      dispatch(loadOffers(data));
+    }catch{
+      dispatch(setLoadingStatus(false));
+      throw new Error('Failed to load data');
+    }
   },
 );
