@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import reducer from './reducer';
 import {State, AppDispatch} from '../types/state';
 import { createAPI } from '../api/api';
+import { redirect } from './middleware';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 
 export const api = createAPI();
@@ -14,5 +15,5 @@ export const store = configureStore({
       thunk: {
         extraArgument: {api},
       },
-    }),
+    }).concat(redirect),
 });
