@@ -6,12 +6,14 @@ type InitialState = {
   city: string;
   isLoading: boolean;
   offerList: OfferInfo[];
+  error: string | null;
 }
 
 const initialState: InitialState = {
   city: 'Paris',
   isLoading: false,
-  offerList: []
+  offerList: [],
+  error: null
 };
 
 const reducer = createReducer(initialState, (builder) => {
