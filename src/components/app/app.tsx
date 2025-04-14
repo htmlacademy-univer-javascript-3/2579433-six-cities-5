@@ -3,7 +3,6 @@ import Favorites from '../../pages/favorites/favorites';
 import Offer from '../../pages/offer/offer';
 import Login from '../../pages/login/login';
 import NotFound from '../../pages/notFound/notFound';
-import ServerError from '../../pages/serverError/server-error.tsx';
 import { AppRoute, AuthorizationStatus } from '../../const.ts';
 import PrivateRoute from '../private-route/private-route.tsx';
 import {Route, BrowserRouter, Routes} from 'react-router-dom';
@@ -35,14 +34,6 @@ function App(): JSX.Element {
         <Route
           path='*'
           element = {<NotFound/>}
-        />
-        <Route
-          path={AppRoute.NotFound}
-          element = {<NotFound/>}
-        />
-        <Route
-          path={AppRoute.ServerError}
-          element = {<ServerError/>}
         />
       </Routes>
     </BrowserRouter>

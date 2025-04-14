@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { changeCity } from '../../store/action';
 import { fetchOffersAction } from '../../store/api-actions';
 import { useEffect } from 'react';
-import { toast } from 'react-toastify';
 import Spinner from '../../components/spinner/spinner';
 
 function Main(): JSX.Element {
@@ -23,13 +22,7 @@ function Main(): JSX.Element {
   };
 
   useEffect(() => {
-    try{
-      dispatch(fetchOffersAction());
-    }catch(error){
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    }
+    dispatch(fetchOffersAction());
   }, [dispatch, city]);
 
   return (
