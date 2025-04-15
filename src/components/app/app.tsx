@@ -3,13 +3,18 @@ import Favorites from '../../pages/favorites/favorites';
 import Offer from '../../pages/offer/offer';
 import Login from '../../pages/login/login';
 import NotFound from '../../pages/notFound/notFound';
-import { AppRoute, AuthorizationStatus } from '../../const.ts';
+import { AppRoute } from '../../const.ts';
+import { useAppSelector } from '../../store/store.ts';
 import PrivateRoute from '../private-route/private-route.tsx';
-import {Route, BrowserRouter, Routes} from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
+import HistoryRouter from '../history-route/history-route.tsx';
+import browserHistory from '../../service/browser-history.ts';
 
 function App(): JSX.Element {
+  const authStatus = useAppSelector((state) => state.authorizationStatus);
+
   return (
-    <BrowserRouter>
+    <HistoryRouter history={browserHistory}>
       <Routes>
         <Route
           path={AppRoute.Main}
@@ -18,7 +23,7 @@ function App(): JSX.Element {
         <Route
           path={AppRoute.Favorites}
           element = {
-            <PrivateRoute authorizationStatus={AuthorizationStatus.NoAuth}>
+            <PrivateRoute authorizationStatus={authStatus}>
               <Favorites/>
             </PrivateRoute>
           }
@@ -36,7 +41,7 @@ function App(): JSX.Element {
           element = {<NotFound/>}
         />
       </Routes>
-    </BrowserRouter>
+    </HistoryRouter>
   );
 }
 

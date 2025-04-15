@@ -1,16 +1,18 @@
 import CardContainer from '../../components/city-container/card-container/card-container';
 import EmptyContainer from '../../components/city-container/empty-container/empty-container';
 import { OfferInfo } from '../../types/offer';
-import { CITIES } from '../../const';
+import { CITIES, AuthorizationStatus, AppRoute } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { changeCity } from '../../store/action';
 import { fetchOffersAction } from '../../store/api-actions';
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Spinner from '../../components/spinner/spinner';
 
 function Main(): JSX.Element {
 
   const isLoading = useAppSelector((state) => state.isLoading);
+  const authStatus = useAppSelector((state) => state.authorizationStatus);
   const city = useAppSelector((state) => state.city);
   const dispatch = useAppDispatch();
 
@@ -36,28 +38,34 @@ function Main(): JSX.Element {
               </a>
             </div>
             <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="#">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                    <span className="header__favorite-count">3</span>
-                  </a>
-                </li>
-                <li className="header__nav-item">
-                  <a className="header__nav-link" href="#">
-                    <span className="header__signout">Sign out</span>
-                  </a>
-                </li>
-              </ul>
+              {authStatus === AuthorizationStatus.Auth ?
+                <ul className="header__nav-list">
+                  <li className="header__nav-item user">
+                    <a className="header__nav-link header__nav-link--profile" href="#">
+                      <div className="header__avatar-wrapper user__avatar-wrapper">
+                      </div>
+                      <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
+                      <span className="header__favorite-count">3</span>
+                    </a>
+                  </li>
+                  <li className="header__nav-item">
+                    <a className="header__nav-link" href="#">
+                      <span className="header__signout">Sign out</span>
+                    </a>
+                  </li>
+                </ul> :
+                <div className="header__nav-item">
+                  <Link className="header__nav-link" to={AppRoute.Login}>
+                    <span className="header__signout">Sign in</span>
+                  </Link>
+                </div>}
             </nav>
           </div>
         </div>
       </header>
 
       <main className="page__main page__main--index">
-        {isLoading && <Spinner/>}
+        {(isLoading || authStatus === AuthorizationStatus.Unknown) && <Spinner/>}
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
