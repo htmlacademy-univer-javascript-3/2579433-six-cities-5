@@ -4,12 +4,16 @@ import { OfferInfo } from '../types/offer';
 
 type InitialState = {
   city: string;
+  isLoading: boolean;
   offerList: OfferInfo[];
+  error: string | null;
 }
 
 const initialState: InitialState = {
   city: 'Paris',
-  offerList: []
+  isLoading: false,
+  offerList: [],
+  error: null
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -17,7 +21,10 @@ const reducer = createReducer(initialState, (builder) => {
     .addCase(Action.changeCity, (state, action) => {
       state.city = action.payload;
     })
-    .addCase(Action.fillOfferList, (state, action) => {
+    .addCase(Action.setLoadingStatus, (state, action) => {
+      state.isLoading = action.payload;
+    })
+    .addCase(Action.loadOffers, (state, action) => {
       state.offerList = action.payload;
     });
 });

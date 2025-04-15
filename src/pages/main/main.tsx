@@ -3,12 +3,14 @@ import EmptyContainer from '../../components/city-container/empty-container/empt
 import { OfferInfo } from '../../types/offer';
 import { CITIES } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { changeCity, fillOfferList } from '../../store/action';
+import { changeCity } from '../../store/action';
+import { fetchOffersAction } from '../../store/api-actions';
 import { useEffect } from 'react';
-import { offers } from '../../mock/offers';
+import Spinner from '../../components/spinner/spinner';
 
 function Main(): JSX.Element {
 
+  const isLoading = useAppSelector((state) => state.isLoading);
   const city = useAppSelector((state) => state.city);
   const dispatch = useAppDispatch();
 
@@ -20,7 +22,7 @@ function Main(): JSX.Element {
   };
 
   useEffect(() => {
-    dispatch(fillOfferList(offers));
+    dispatch(fetchOffersAction());
   }, [dispatch, city]);
 
   return (
@@ -55,6 +57,7 @@ function Main(): JSX.Element {
       </header>
 
       <main className="page__main page__main--index">
+        {isLoading && <Spinner/>}
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
