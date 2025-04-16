@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import reducer from './reducer';
 import {State, AppDispatch} from '../types/state';
-import { createAPI } from '../api/api';
+import { createAPI } from '../service/api';
 import { redirect } from './middleware';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 

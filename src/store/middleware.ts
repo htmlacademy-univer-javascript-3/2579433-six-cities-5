@@ -1,5 +1,5 @@
 import {PayloadAction} from '@reduxjs/toolkit';
-import browserHistory from '../browser-history';
+import browserHistory from '../service/browser-history';
 import {Middleware} from 'redux';
 import reducer from './reducer';
 

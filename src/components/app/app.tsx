@@ -3,13 +3,23 @@ import Favorites from '../../pages/favorites/favorites';
 import Offer from '../../pages/offer/offer';
 import Login from '../../pages/login/login';
 import NotFound from '../../pages/notFound/notFound';
-import { AppRoute, AuthorizationStatus } from '../../const.ts';
+import { AppRoute } from '../../const.ts';
 import PrivateRoute from '../private-route/private-route.tsx';
-import {Route, BrowserRouter, Routes} from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
+import HistoryRouter from '../history-route/history-route.tsx';
+import browserHistory from '../../service/browser-history.ts';
+import { useEffect } from 'react';
+import { checkAuthAction } from '../../store/api-actions';
+import { store } from '../../store/store.ts';
 
 function App(): JSX.Element {
+
+  useEffect(() => {
+    store.dispatch(checkAuthAction());
+  }, []);
+
   return (
-    <BrowserRouter>
+    <HistoryRouter history={browserHistory}>
       <Routes>
         <Route
           path={AppRoute.Main}
@@ -18,7 +28,7 @@ function App(): JSX.Element {
         <Route
           path={AppRoute.Favorites}
           element = {
-            <PrivateRoute authorizationStatus={AuthorizationStatus.NoAuth}>
+            <PrivateRoute redirectRoute={AppRoute.Login}>
               <Favorites/>
             </PrivateRoute>
           }
@@ -29,14 +39,18 @@ function App(): JSX.Element {
         />
         <Route
           path={AppRoute.Login}
-          element = {<Login/>}
+          element = {
+            <PrivateRoute redirectRoute={AppRoute.Main}>
+              <Login/>
+            </PrivateRoute>
+          }
         />
         <Route
           path='*'
           element = {<NotFound/>}
         />
       </Routes>
-    </BrowserRouter>
+    </HistoryRouter>
   );
 }
 
