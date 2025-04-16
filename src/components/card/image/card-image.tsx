@@ -13,7 +13,7 @@ function CardImage({display, offerID, previewImage}: CardImageProps): JSX.Elemen
 
   return (
     <div className={`${display}__image-wrapper place-card__image-wrapper`}>
-      <Link to={`${AppRoute.Offer}:${offerID}`}>
+      <Link to={`${AppRoute.Offer}${offerID}`}>
         <img className="place-card__image" src={previewImage} width={width} height={heigth} alt="Place image" />
       </Link>
     </div>

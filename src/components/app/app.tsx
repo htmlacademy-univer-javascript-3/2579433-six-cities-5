@@ -39,11 +39,7 @@ function App(): JSX.Element {
         />
         <Route
           path={AppRoute.Login}
-          element = {
-            <PrivateRoute redirectRoute={AppRoute.Main}>
-              <Login/>
-            </PrivateRoute>
-          }
+          element = {<Login/>}
         />
         <Route
           path='*'
