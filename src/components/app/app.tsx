@@ -11,6 +11,8 @@ import browserHistory from '../../service/browser-history.ts';
 import { useEffect } from 'react';
 import { checkAuthAction } from '../../store/api-actions';
 import { store } from '../../store/store.ts';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App(): JSX.Element {
 
@@ -46,6 +48,7 @@ function App(): JSX.Element {
           element = {<NotFound/>}
         />
       </Routes>
+      <ToastContainer/>
     </HistoryRouter>
   );
 }
