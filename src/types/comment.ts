@@ -11,3 +11,9 @@ export type CommentInfo = {
   comment: string;
   rating: number;
 }
+
+export type Comment = {
+  offerId: string;
+  comment: string;
+  rating: number;
+}

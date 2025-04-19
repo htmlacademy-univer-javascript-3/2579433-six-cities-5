@@ -1,14 +1,21 @@
-import { Link } from 'react-router-dom';
-import { AppRoute } from '../../const';
+import { Link, useNavigate } from 'react-router-dom';
+import { AppRoute, AuthorizationStatus } from '../../const';
 import { FormEvent, useRef } from 'react';
-import { useAppDispatch } from '../../store/store';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 import { loginAction } from '../../store/api-actions';
 import { toast } from 'react-toastify';
 
 function Login(): JSX.Element {
+  const city = useAppSelector((state) => state.city);
+  const authStatus = useAppSelector((state) => state.authorizationStatus);
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  if(authStatus === AuthorizationStatus.Auth){
+    navigate(AppRoute.Main);
+  }
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -18,8 +25,8 @@ function Login(): JSX.Element {
       const isValid = /[a-zA-Z]/.test(password) && /\d/.test(password) && email !== '';
       if(isValid){
         dispatch(loginAction({
-          email: emailRef.current.value,
-          password: passwordRef.current.value
+          email: email,
+          password: password
         }));
       }else{
         toast.warn('Incorrect email or password');
@@ -60,7 +67,7 @@ function Login(): JSX.Element {
           <section className="locations locations--login locations--current">
             <div className="locations__item">
               <a className="locations__item-link" href="#">
-                <span>Amsterdam</span>
+                <span>{city}</span>
               </a>
             </div>
           </section>

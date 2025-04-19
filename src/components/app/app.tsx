@@ -8,15 +8,10 @@ import PrivateRoute from '../private-route/private-route.tsx';
 import {Route, Routes} from 'react-router-dom';
 import HistoryRouter from '../history-route/history-route.tsx';
 import browserHistory from '../../service/browser-history.ts';
-import { useEffect } from 'react';
-import { checkAuthAction } from '../../store/api-actions';
-import { store } from '../../store/store.ts';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App(): JSX.Element {
-
-  useEffect(() => {
-    store.dispatch(checkAuthAction());
-  }, []);
 
   return (
     <HistoryRouter history={browserHistory}>
@@ -39,17 +34,14 @@ function App(): JSX.Element {
         />
         <Route
           path={AppRoute.Login}
-          element = {
-            <PrivateRoute redirectRoute={AppRoute.Main}>
-              <Login/>
-            </PrivateRoute>
-          }
+          element = {<Login/>}
         />
         <Route
           path='*'
           element = {<NotFound/>}
         />
       </Routes>
+      <ToastContainer/>
     </HistoryRouter>
   );
 }
