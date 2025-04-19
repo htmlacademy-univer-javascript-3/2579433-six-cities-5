@@ -1,5 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 import { OfferInfo, FullOfferInfo } from '../types/offer';
+import { UserData } from '../types/userdata';
 import { AppRoute, AuthorizationStatus } from '../const';
 import { CommentInfo } from '../types/comment';
 
@@ -22,3 +23,5 @@ export const navigateTo = createAction<string>('NAVIGATE_TO');
 export const redirectTo = createAction<AppRoute>('REDIRECT_TO');
 
 export const requireAuthorization = createAction<AuthorizationStatus>('REQUIRE_AUTH');
+
+export const changeUserData = createAction<UserData | null>('LOGIN_LOGOUT');

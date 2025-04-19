@@ -3,6 +3,7 @@ import * as Action from './action';
 import { OfferInfo, FullOfferInfo } from '../types/offer';
 import { AuthorizationStatus } from '../const';
 import { CommentInfo } from '../types/comment';
+import { UserData } from '../types/userdata';
 
 type InitialState = {
   city: string;
@@ -12,6 +13,7 @@ type InitialState = {
   currentOffer: FullOfferInfo;
   nearPlaces: OfferInfo[];
   comments: CommentInfo[];
+  user: UserData | null;
 }
 
 const initialState: InitialState = {
@@ -21,7 +23,8 @@ const initialState: InitialState = {
   authorizationStatus: AuthorizationStatus.Unknown,
   currentOffer: {} as FullOfferInfo,
   nearPlaces: [],
-  comments: []
+  comments: [],
+  user: null
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -49,6 +52,9 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(Action.addComment, (state, action) => {
       state.comments.push(action.payload);
+    })
+    .addCase(Action.changeUserData, (state, action) => {
+      state.user = action.payload;
     });
 });
 
