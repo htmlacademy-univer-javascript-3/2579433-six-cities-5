@@ -7,7 +7,6 @@ import { loadOffers, redirectTo, setLoadingStatus, requireAuthorization, loadCur
 import { APIRoute, AppRoute, AuthorizationStatus } from '../const';
 import { saveToken, dropToken } from '../service/token';
 import { CommentInfo, Comment } from '../types/comment';
-import { useAppSelector } from './store';
 
 export const fetchOffersAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch;
@@ -48,18 +47,14 @@ export const fetchCurrentOfferAction = createAsyncThunk<void, string, {
   async (id, {dispatch, extra: {api}}) => {
     try{
       dispatch(setLoadingStatus(true));
-      const oldOfferID = useAppSelector((state) => state.currentOffer.id);
-      const offer = await api.get<FullOfferInfo>(`${APIRoute.OfferID}${id}`);
+      const [offer, near, comments] = await Promise.all([
+        await api.get<FullOfferInfo>(`${APIRoute.OfferID}${id}`),
+        await api.get<OfferInfo[]>(`${APIRoute.OfferID}${id}${APIRoute.Nearby}`),
+        await api.get<CommentInfo[]>(`${APIRoute.Comments}${id}`)
+      ]);
       dispatch(loadCurrentOffer(offer.data));
-
-      if(offer.data.id === oldOfferID){
-        const [near, comments] = await Promise.all([
-          await api.get<OfferInfo[]>(`${APIRoute.OfferID}${id}${APIRoute.Nearby}`),
-          await api.get<CommentInfo[]>(`${APIRoute.Comments}${id}`)
-        ]);
-        dispatch(loadNearPlaces(near.data));
-        dispatch(loadComments(comments.data));
-      }
+      dispatch(loadNearPlaces(near.data));
+      dispatch(loadComments(comments.data));
     }catch(error){
       if(isAxiosError(error) && error.response?.status === 404){
         dispatch(redirectTo(AppRoute.NotFound));
@@ -90,8 +85,9 @@ export const checkAuthAction = createAsyncThunk<void, undefined, {
   'CHECK_AUTH',
   async (_arg, {dispatch, extra: {api}}) => {
     try {
-      await api.get(APIRoute.Login);
+      const {data} = await api.get<UserData>(APIRoute.Login);
       dispatch(requireAuthorization(AuthorizationStatus.Auth));
+      dispatch(changeUserData(data));
     } catch {
       dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
     }

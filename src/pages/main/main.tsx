@@ -6,7 +6,8 @@ import { OfferInfo } from '../../types/offer';
 import { CITIES, AuthorizationStatus} from '../../const';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { changeCity } from '../../store/action';
-import { fetchOffersAction } from '../../store/api-actions';
+import { fetchOffersAction, checkAuthAction } from '../../store/api-actions';
+import { setLoadingStatus } from '../../store/action';
 import { useEffect } from 'react';
 
 function Main(): JSX.Element {
@@ -24,7 +25,9 @@ function Main(): JSX.Element {
   };
 
   useEffect(() => {
+    dispatch(setLoadingStatus(true));
     dispatch(fetchOffersAction());
+    dispatch(checkAuthAction());
   }, [dispatch, city]);
 
   return (

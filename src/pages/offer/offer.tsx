@@ -9,7 +9,7 @@ import Spinner from '../../components/spinner/spinner.tsx';
 import Header from '../../components/header/header.tsx';
 import { PointInfo } from '../../types/offer.ts';
 import { useAppSelector, useAppDispatch } from '../../store/store.ts';
-import { fetchCurrentOfferAction } from '../../store/api-actions.ts';
+import { fetchCurrentOfferAction, checkAuthAction } from '../../store/api-actions.ts';
 
 function Offer(): JSX.Element {
   const [selectedPoint, setSelectedPoint] = useState<string | null>(null);
@@ -24,6 +24,7 @@ function Offer(): JSX.Element {
 
   useEffect(() => {
     if(id){
+      dispatch(checkAuthAction());
       dispatch(fetchCurrentOfferAction(id));
     }
   }, [dispatch, id]);
