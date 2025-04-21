@@ -5,19 +5,20 @@ import Header from '../../components/header/header';
 import { OfferInfo } from '../../types/offer';
 import { CITIES, AuthorizationStatus} from '../../const';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { changeCity } from '../../store/action';
+import { getLoadingStatus, getCity, getOfferList } from '../../store/selectors/main-page-selector';
+import { getAuthorizationStatus } from '../../store/selectors/authentication-selector';
+import { changeCity } from '../../store/reducers/main-page-process';
 import { fetchOffersAction, checkAuthAction } from '../../store/api-actions';
-import { setLoadingStatus } from '../../store/action';
 import { useEffect } from 'react';
 
 function Main(): JSX.Element {
 
-  const isLoading = useAppSelector((state) => state.isLoading);
-  const authStatus = useAppSelector((state) => state.authorizationStatus);
-  const city = useAppSelector((state) => state.city);
+  const isLoading = useAppSelector(getLoadingStatus);
+  const authStatus = useAppSelector(getAuthorizationStatus);
+  const city = useAppSelector(getCity);
   const dispatch = useAppDispatch();
 
-  const offerList = useAppSelector((state) => state.offerList);
+  const offerList = useAppSelector(getOfferList);
   const filteredOffers: OfferInfo[] = offerList.filter((offer) => offer.city.name === city);
 
   const handleCityChange = (newCity: string) => {
@@ -25,7 +26,6 @@ function Main(): JSX.Element {
   };
 
   useEffect(() => {
-    dispatch(setLoadingStatus(true));
     dispatch(fetchOffersAction());
     dispatch(checkAuthAction());
   }, [dispatch, city]);

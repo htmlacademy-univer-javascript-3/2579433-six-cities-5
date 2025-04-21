@@ -9,25 +9,34 @@ import Spinner from '../../components/spinner/spinner.tsx';
 import Header from '../../components/header/header.tsx';
 import { PointInfo } from '../../types/offer.ts';
 import { useAppSelector, useAppDispatch } from '../../store/store.ts';
-import { fetchCurrentOfferAction, checkAuthAction } from '../../store/api-actions.ts';
+import { getAuthorizationStatus } from '../../store/selectors/authentication-selector.ts';
+import { getLoadingStatus, getCurrentOfferInfo, getComments, getNearPlaces, getOldOfferId } from '../../store/selectors/offer-page-selector.ts';
+import { setOldOfferId } from '../../store/reducers/offer-page-process.ts';
+import { fetchCurrentOfferAction, fetchCommentsAction, fetchNearbyAction, checkAuthAction } from '../../store/api-actions.ts';
 
 function Offer(): JSX.Element {
   const [selectedPoint, setSelectedPoint] = useState<string | null>(null);
   const { id } = useParams<{ id: string }>();
 
-  const isLoading = useAppSelector((state) => state.isLoading);
-  const authStatus = useAppSelector((state) => state.authorizationStatus);
-  const offer = useAppSelector((state) => state.currentOffer);
-  const comments = useAppSelector((state) => state.comments);
-  const nearOffersInfo = useAppSelector((state) => state.nearPlaces);
+  const isLoading = useAppSelector(getLoadingStatus);
+  const authStatus = useAppSelector(getAuthorizationStatus);
+  const offer = useAppSelector(getCurrentOfferInfo);
+  const comments = useAppSelector(getComments);
+  const nearOffersInfo = useAppSelector(getNearPlaces);
+  const oldOfferId = useAppSelector(getOldOfferId);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if(id){
       dispatch(checkAuthAction());
-      dispatch(fetchCurrentOfferAction(id));
+      if(oldOfferId === id){
+        dispatch(fetchCurrentOfferAction(id));
+        dispatch(fetchNearbyAction(id));
+        dispatch(fetchCommentsAction(id));
+        setOldOfferId(id);
+      }
     }
-  }, [dispatch, id]);
+  }, [dispatch, id, oldOfferId]);
 
   const {title, type, price, isFavorite, isPremium, rating, description, bedrooms, goods, host, images, maxAdults} = offer;
   const points: PointInfo[] = nearOffersInfo.map((point) => ({id: point.id, location: point.location}));

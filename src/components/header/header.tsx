@@ -1,6 +1,7 @@
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { Link } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../store/store';
+import { getAuthorizationStatus, getUserData } from '../../store/selectors/authentication-selector';
 import { logoutAction } from '../../store/api-actions';
 
 type HeaderProps = {
@@ -8,13 +9,14 @@ type HeaderProps = {
 }
 
 function Header({isActive}: HeaderProps): JSX.Element {
-  const authStatus = useAppSelector((state) => state.authorizationStatus);
-  const userData = useAppSelector((state) => state.user);
+  const authStatus = useAppSelector(getAuthorizationStatus);
+  const userData = useAppSelector(getUserData);
   const dispatch = useAppDispatch();
 
   const linkClass = isActive ? 'header__logo-link header__logo-link--active' : 'header__logo-link';
 
   const handleLogout = (evt: React.MouseEvent<HTMLAnchorElement>) => {
+    evt.preventDefault();
     evt.stopPropagation();
     if(userData){
       dispatch(logoutAction);

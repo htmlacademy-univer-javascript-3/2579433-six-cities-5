@@ -2,12 +2,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { FormEvent, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/store';
+import { getAuthorizationStatus } from '../../store/selectors/authentication-selector';
+import { getCity } from '../../store/selectors/main-page-selector';
 import { loginAction } from '../../store/api-actions';
 import { toast } from 'react-toastify';
 
 function Login(): JSX.Element {
-  const city = useAppSelector((state) => state.city);
-  const authStatus = useAppSelector((state) => state.authorizationStatus);
+  const city = useAppSelector(getCity);
+  const authStatus = useAppSelector(getAuthorizationStatus);
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();

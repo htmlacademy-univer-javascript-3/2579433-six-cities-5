@@ -1,0 +1,11 @@
+import {NameSpace} from '../../const';
+import { CommentInfo } from '../../types/comment';
+import { FullOfferInfo, OfferInfo } from '../../types/offer';
+import {State} from '../../types/state';
+
+export const getLoadingStatus = (state: State): boolean => state[NameSpace.Offer].isLoading;
+export const getCurrentOfferInfo = (state: State): FullOfferInfo => state[NameSpace.Offer].currentOffer;
+export const getCurrentOfferId = (state: State): string => state[NameSpace.Offer].currentOffer.id;
+export const getOldOfferId = (state: State): string | null => state[NameSpace.Offer].oldOfferId;
+export const getNearPlaces = (state: State): OfferInfo[] => state[NameSpace.Offer].nearPlaces;
+export const getComments = (state: State): CommentInfo[] => state[NameSpace.Offer].comments;

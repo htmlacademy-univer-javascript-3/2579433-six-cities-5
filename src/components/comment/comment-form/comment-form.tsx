@@ -1,11 +1,12 @@
 import React, { FormEvent, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
+import { getCurrentOfferId } from '../../../store/selectors/offer-page-selector';
 import { postComment } from '../../../store/api-actions';
 
 function CommentForm(): JSX.Element {
   const [commentInfo, setCommentInfo] = useState({rating: 0, text: ''});
   const {rating, text} = commentInfo;
-  const id = useAppSelector((state) => state.currentOffer.id);
+  const id = useAppSelector(getCurrentOfferId);
   const dispatch = useAppDispatch();
 
   const handleRatingChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
