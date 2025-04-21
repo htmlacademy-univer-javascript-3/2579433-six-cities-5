@@ -10,7 +10,7 @@ import Header from '../../components/header/header.tsx';
 import { PointInfo } from '../../types/offer.ts';
 import { useAppSelector, useAppDispatch } from '../../store/store.ts';
 import { getAuthorizationStatus } from '../../store/selectors/authentication-selector.ts';
-import { getLoadingStatus, getCurrentOfferInfo, getComments, getNearPlaces, getOldOfferId } from '../../store/selectors/offer-page-selector.ts';
+import { getLoadingStatus, getOldOfferId, getOfferBundle } from '../../store/selectors/offer-page-selector.ts';
 import { setOldOfferId } from '../../store/reducers/offer-page-process.ts';
 import { fetchCurrentOfferAction, fetchCommentsAction, fetchNearbyAction } from '../../store/api-actions.ts';
 
@@ -19,9 +19,7 @@ function Offer(): JSX.Element {
 
   const isLoading = useAppSelector(getLoadingStatus);
   const authStatus = useAppSelector(getAuthorizationStatus);
-  const offer = useAppSelector(getCurrentOfferInfo);
-  const comments = useAppSelector(getComments);
-  const nearOffersInfo = useAppSelector(getNearPlaces);
+  const {offer, comments, nearOffersInfo} = useAppSelector(getOfferBundle);
   const oldOfferId = useAppSelector(getOldOfferId);
   const dispatch = useAppDispatch();
 
@@ -44,9 +42,9 @@ function Offer(): JSX.Element {
   }
 
   const {id, title, type, price, location, isFavorite, isPremium, rating, description, bedrooms, goods, host, images, maxAdults} = offer;
-  const points: PointInfo[] = nearOffersInfo.map((point) => ({id: point.id, location: point.location}));
-  const firstThreePoints = points.slice(0, 3);
-  firstThreePoints.push({id: id, location: location});
+  const firstThreePoints = nearOffersInfo.slice(0, 3);
+  const points: PointInfo[] = firstThreePoints.map((point) => ({id: point.id, location: point.location}));
+  points.push({id: id, location: location});
 
   return (
     <div className="page">
@@ -140,13 +138,13 @@ function Offer(): JSX.Element {
             </div>
           </div>
           <section className="offer__map map">
-            <Map city={offer.city} points={firstThreePoints} selectedPoint={id} />
+            <Map city={offer.city} points={points} selectedPoint={id} />
           </section>
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
-            <CardList display={Display.NEAR} offers={nearOffersInfo} onPointChange={() => {}}/>
+            <CardList display={Display.NEAR} offers={firstThreePoints} onPointChange={() => {}}/>
           </section>
         </div>
       </main>

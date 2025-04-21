@@ -2,14 +2,13 @@ import CardContainer from '../../components/city-container/card-container/card-c
 import EmptyContainer from '../../components/city-container/empty-container/empty-container';
 import Spinner from '../../components/spinner/spinner';
 import Header from '../../components/header/header';
-import { OfferInfo } from '../../types/offer';
 import { CITIES, AuthorizationStatus} from '../../const';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { getLoadingStatus, getCity, getOfferList } from '../../store/selectors/main-page-selector';
 import { getAuthorizationStatus } from '../../store/selectors/authentication-selector';
 import { changeCity } from '../../store/reducers/main-page-process';
 import { fetchOffersAction } from '../../store/api-actions';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 function Main(): JSX.Element {
 
@@ -19,7 +18,9 @@ function Main(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const offerList = useAppSelector(getOfferList);
-  const filteredOffers: OfferInfo[] = offerList.filter((offer) => offer.city.name === city);
+  const filteredOffers = useMemo(() =>
+    offerList.filter((offer) => offer.city.name === city),
+  [offerList, city]);
 
   const handleCityChange = (newCity: string) => {
     dispatch(changeCity(newCity));
@@ -27,7 +28,7 @@ function Main(): JSX.Element {
 
   useEffect(() => {
     dispatch(fetchOffersAction());
-  }, [dispatch, city]);
+  }, [dispatch]);
 
   return (
     <div className="page page--gray page--main">
