@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { getLoadingStatus, getCity, getOfferList } from '../../store/selectors/main-page-selector';
 import { getAuthorizationStatus } from '../../store/selectors/authentication-selector';
 import { changeCity } from '../../store/reducers/main-page-process';
-import { fetchOffersAction, checkAuthAction } from '../../store/api-actions';
+import { fetchOffersAction } from '../../store/api-actions';
 import { useEffect } from 'react';
 
 function Main(): JSX.Element {
@@ -27,7 +27,6 @@ function Main(): JSX.Element {
 
   useEffect(() => {
     dispatch(fetchOffersAction());
-    dispatch(checkAuthAction());
   }, [dispatch, city]);
 
   return (

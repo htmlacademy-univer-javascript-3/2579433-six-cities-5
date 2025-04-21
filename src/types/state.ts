@@ -21,7 +21,7 @@ export type MainPageData = {
 export type OfferPageData = {
   isLoading: boolean;
   oldOfferId: string | null;
-  currentOffer: FullOfferInfo;
+  currentOffer: FullOfferInfo | null;
   nearPlaces: OfferInfo[];
   comments: CommentInfo[];
 }

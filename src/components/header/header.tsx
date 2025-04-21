@@ -1,8 +1,10 @@
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../../store/store';
 import { getAuthorizationStatus, getUserData } from '../../store/selectors/authentication-selector';
 import { logoutAction } from '../../store/api-actions';
+import { checkAuthAction } from '../../store/api-actions';
 
 type HeaderProps = {
   isActive: boolean;
@@ -19,9 +21,13 @@ function Header({isActive}: HeaderProps): JSX.Element {
     evt.preventDefault();
     evt.stopPropagation();
     if(userData){
-      dispatch(logoutAction);
+      dispatch(logoutAction());
     }
   };
+
+  useEffect(() => {
+    dispatch(checkAuthAction());
+  }, [dispatch]);
 
   return (
     <header className="header">

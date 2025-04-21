@@ -1,13 +1,12 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {NameSpace} from '../../const';
 import { OfferPageData } from '../../types/state';
-import { FullOfferInfo } from '../../types/offer';
 import { fetchCurrentOfferAction, fetchNearbyAction, fetchCommentsAction, postComment } from '../api-actions';
 
 const initialState: OfferPageData = {
   isLoading: false,
   oldOfferId: null,
-  currentOffer: {} as FullOfferInfo,
+  currentOffer: null,
   nearPlaces: [],
   comments: []
 };
