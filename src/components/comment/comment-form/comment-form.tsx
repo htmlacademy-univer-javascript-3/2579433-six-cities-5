@@ -5,7 +5,7 @@ import { postComment } from '../../../store/api-actions';
 
 function CommentForm(): JSX.Element {
   const [commentInfo, setCommentInfo] = useState({rating: 0, text: ''});
-  const { id } = useParams<{ id: string }>();
+  const { offerId } = useParams<{ offerId: string }>();
   const {rating, text} = commentInfo;
   const dispatch = useAppDispatch();
 
@@ -20,9 +20,9 @@ function CommentForm(): JSX.Element {
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    if(id){
+    if(offerId){
       dispatch(postComment({
-        offerId: id,
+        offerId: offerId,
         comment: text,
         rating: rating
       }));

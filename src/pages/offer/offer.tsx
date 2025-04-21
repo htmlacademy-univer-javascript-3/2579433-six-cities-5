@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Display, AuthorizationStatus } from '../../const.ts';
 import { useParams } from 'react-router-dom';
 import Map from '../../components/map/map.tsx';
@@ -15,8 +15,7 @@ import { setOldOfferId } from '../../store/reducers/offer-page-process.ts';
 import { fetchCurrentOfferAction, fetchCommentsAction, fetchNearbyAction } from '../../store/api-actions.ts';
 
 function Offer(): JSX.Element {
-  const [selectedPoint, setSelectedPoint] = useState<string | null>(null);
-  const { id } = useParams<{ id: string }>();
+  const { offerId } = useParams<{ offerId: string }>();
 
   const isLoading = useAppSelector(getLoadingStatus);
   const authStatus = useAppSelector(getAuthorizationStatus);
@@ -27,13 +26,13 @@ function Offer(): JSX.Element {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if(id && oldOfferId !== id){
-      dispatch(fetchCurrentOfferAction(id));
-      dispatch(fetchNearbyAction(id));
-      dispatch(fetchCommentsAction(id));
-      dispatch(setOldOfferId(id));
+    if(offerId && oldOfferId !== offerId){
+      dispatch(fetchCurrentOfferAction(offerId));
+      dispatch(fetchNearbyAction(offerId));
+      dispatch(fetchCommentsAction(offerId));
+      dispatch(setOldOfferId(offerId));
     }
-  }, [dispatch, id, oldOfferId]);
+  }, [dispatch, offerId, oldOfferId]);
 
   if(!offer || isLoading || authStatus === AuthorizationStatus.Unknown){
     return(
@@ -44,8 +43,10 @@ function Offer(): JSX.Element {
     );
   }
 
-  const {title, type, price, isFavorite, isPremium, rating, description, bedrooms, goods, host, images, maxAdults} = offer;
+  const {id, title, type, price, location, isFavorite, isPremium, rating, description, bedrooms, goods, host, images, maxAdults} = offer;
   const points: PointInfo[] = nearOffersInfo.map((point) => ({id: point.id, location: point.location}));
+  const firstThreePoints = points.slice(0, 3);
+  firstThreePoints.push({id: id, location: location});
 
   return (
     <div className="page">
@@ -139,13 +140,13 @@ function Offer(): JSX.Element {
             </div>
           </div>
           <section className="offer__map map">
-            <Map city={offer.city} points={points} selectedPoint={selectedPoint} />
+            <Map city={offer.city} points={firstThreePoints} selectedPoint={id} />
           </section>
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
-            <CardList display={Display.NEAR} offers={nearOffersInfo} onPointChange={setSelectedPoint}/>
+            <CardList display={Display.NEAR} offers={nearOffersInfo} onPointChange={() => {}}/>
           </section>
         </div>
       </main>

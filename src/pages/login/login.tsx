@@ -1,14 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { AppRoute, AuthorizationStatus } from '../../const';
+import { AppRoute, AuthorizationStatus, CITIES } from '../../const';
 import { FormEvent, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { getAuthorizationStatus } from '../../store/selectors/authentication-selector';
-import { getCity } from '../../store/selectors/main-page-selector';
 import { loginAction } from '../../store/api-actions';
 import { toast } from 'react-toastify';
+import { changeCity } from '../../store/reducers/main-page-process';
 
 function Login(): JSX.Element {
-  const city = useAppSelector(getCity);
+  const city = Math.floor(Math.random() * 6);
   const authStatus = useAppSelector(getAuthorizationStatus);
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
@@ -18,6 +18,12 @@ function Login(): JSX.Element {
   if(authStatus === AuthorizationStatus.Auth){
     navigate(AppRoute.Main);
   }
+
+  const handleLinkClick = (evt: React.MouseEvent<HTMLAnchorElement>) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    dispatch(changeCity(CITIES[city]));
+  };
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -68,9 +74,9 @@ function Login(): JSX.Element {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="#">
-                <span>{city}</span>
-              </a>
+              <Link className="locations__item" to={AppRoute.Main} onClick={handleLinkClick}>
+                <span>{CITIES[city]}</span>
+              </Link>
             </div>
           </section>
         </div>
