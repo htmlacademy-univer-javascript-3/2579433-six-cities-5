@@ -1,11 +1,12 @@
 import React, { FormEvent, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../store/store';
+import { useParams } from 'react-router-dom';
+import { useAppDispatch } from '../../../store/store';
 import { postComment } from '../../../store/api-actions';
 
 function CommentForm(): JSX.Element {
   const [commentInfo, setCommentInfo] = useState({rating: 0, text: ''});
+  const { offerId } = useParams<{ offerId: string }>();
   const {rating, text} = commentInfo;
-  const id = useAppSelector((state) => state.currentOffer.id);
   const dispatch = useAppDispatch();
 
   const handleRatingChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,12 +20,14 @@ function CommentForm(): JSX.Element {
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    dispatch(postComment({
-      offerId: id,
-      comment: text,
-      rating: rating
-    }));
-    setCommentInfo({rating: 0, text: ''});
+    if(offerId){
+      dispatch(postComment({
+        offerId: offerId,
+        comment: text,
+        rating: rating
+      }));
+      setCommentInfo({rating: 0, text: ''});
+    }
   };
 
   return (

@@ -1,25 +1,33 @@
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../../store/store';
+import { getAuthorizationStatus, getUserData } from '../../store/selectors/authentication-selector';
 import { logoutAction } from '../../store/api-actions';
+import { checkAuthAction } from '../../store/api-actions';
 
 type HeaderProps = {
   isActive: boolean;
 }
 
 function Header({isActive}: HeaderProps): JSX.Element {
-  const authStatus = useAppSelector((state) => state.authorizationStatus);
-  const userData = useAppSelector((state) => state.user);
+  const authStatus = useAppSelector(getAuthorizationStatus);
+  const userData = useAppSelector(getUserData);
   const dispatch = useAppDispatch();
 
   const linkClass = isActive ? 'header__logo-link header__logo-link--active' : 'header__logo-link';
 
   const handleLogout = (evt: React.MouseEvent<HTMLAnchorElement>) => {
+    evt.preventDefault();
     evt.stopPropagation();
     if(userData){
-      dispatch(logoutAction);
+      dispatch(logoutAction());
     }
   };
+
+  useEffect(() => {
+    dispatch(checkAuthAction());
+  }, [dispatch]);
 
   return (
     <header className="header">
@@ -34,12 +42,12 @@ function Header({isActive}: HeaderProps): JSX.Element {
             {authStatus === AuthorizationStatus.Auth ?
               <ul className="header__nav-list">
                 <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="#">
+                  <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Favorites}>
                     <div className="header__avatar-wrapper user__avatar-wrapper">
                     </div>
                     <span className="header__user-name user__name">{userData && userData.email}</span>
                     <span className="header__favorite-count">3</span>
-                  </a>
+                  </Link>
                 </li>
                 <li className="header__nav-item">
                   <a className="header__nav-link" href="#" onClick={handleLogout}>
