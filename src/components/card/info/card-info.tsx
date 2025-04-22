@@ -14,15 +14,18 @@ type ShortCardInfo = {
 type CardInfoProps = {
   display: Display;
   shortCardInfo: ShortCardInfo;
+  toggleFavorite: (offerId: string, newStatus: boolean, nitialStatus: boolean) => void;
 }
 
-function CardInfo({display, shortCardInfo}: CardInfoProps): JSX.Element {
+function CardInfo({display, shortCardInfo, toggleFavorite}: CardInfoProps): JSX.Element {
   const [isFavorite, setIsFavorite] = useState(shortCardInfo.isFavorite);
   const {id, title, type, price, rating} = shortCardInfo;
   const cardClass = display === Display.FAVORITE && `${display}__card-info `;
 
   const handleBookmarkClick = () => {
-    setIsFavorite((currentState) => !currentState);
+    const newStatus = !isFavorite;
+    setIsFavorite(newStatus);
+    toggleFavorite(id, newStatus, shortCardInfo.isFavorite);
   };
 
   return(

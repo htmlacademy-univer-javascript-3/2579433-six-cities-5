@@ -3,9 +3,11 @@ import {NameSpace} from '../../const';
 import { mainPageData } from './main-page-process';
 import { offerPageData } from './offer-page-process';
 import { userProcess } from './authentication-process';
+import { favoritePageData } from './favorite-page-process';
 
 export const rootReducer = combineReducers({
   [NameSpace.Offer]: offerPageData.reducer,
   [NameSpace.Main]: mainPageData.reducer,
   [NameSpace.Auth]: userProcess.reducer,
+  [NameSpace.Favorite]: favoritePageData.reducer
 });

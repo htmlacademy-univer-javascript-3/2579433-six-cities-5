@@ -22,7 +22,8 @@ export enum APIRoute {
 export enum NameSpace {
   Main = 'MAIN',
   Offer = 'OFFER',
-  Auth = 'AUTH'
+  Auth = 'AUTH',
+  Favorite = 'FAVORITE'
 }
 
 export enum AuthorizationStatus {

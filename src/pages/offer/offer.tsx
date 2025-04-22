@@ -10,9 +10,9 @@ import Header from '../../components/header/header.tsx';
 import { PointInfo } from '../../types/offer.ts';
 import { useAppSelector, useAppDispatch } from '../../store/store.ts';
 import { getAuthorizationStatus } from '../../store/selectors/authentication-selector.ts';
-import { getLoadingStatus, getOldOfferId, getOfferBundle } from '../../store/selectors/offer-page-selector.ts';
-import { setOldOfferId } from '../../store/reducers/offer-page-process.ts';
-import { fetchCurrentOfferAction, fetchCommentsAction, fetchNearbyAction } from '../../store/api-actions.ts';
+import { getLoadingStatus, getOldOfferId, getOfferBundle, getFavoriteStatus } from '../../store/selectors/offer-page-selector.ts';
+import { setOldOfferId, changeFavoriteStatus } from '../../store/reducers/offer-page-process.ts';
+import { fetchCurrentOfferAction, fetchCommentsAction, fetchNearbyAction, changeOfferStatus } from '../../store/api-actions.ts';
 
 function Offer(): JSX.Element {
   const { offerId } = useParams<{ offerId: string }>();
@@ -21,7 +21,15 @@ function Offer(): JSX.Element {
   const authStatus = useAppSelector(getAuthorizationStatus);
   const {offer, comments, nearOffersInfo} = useAppSelector(getOfferBundle);
   const oldOfferId = useAppSelector(getOldOfferId);
+  const isFavorite = useAppSelector(getFavoriteStatus);
   const dispatch = useAppDispatch();
+
+  const handleBookmarkClick = () => {
+    if(offerId){
+      dispatch(changeOfferStatus({offerId: offerId, status: Number(!isFavorite)}));
+      dispatch(changeFavoriteStatus(!isFavorite));
+    }
+  };
 
   useEffect(() => {
     if(offerId && oldOfferId !== offerId){
@@ -41,7 +49,7 @@ function Offer(): JSX.Element {
     );
   }
 
-  const {id, title, type, price, location, isFavorite, isPremium, rating, description, bedrooms, goods, host, images, maxAdults} = offer;
+  const {id, title, type, price, location, isPremium, rating, description, bedrooms, goods, host, images, maxAdults} = offer;
   const firstThreePoints = nearOffersInfo.slice(0, 3);
   const points: PointInfo[] = firstThreePoints.map((point) => ({id: point.id, location: point.location}));
   points.push({id: id, location: location});
@@ -71,7 +79,7 @@ function Offer(): JSX.Element {
                 <h1 className="offer__name">
                   {title}
                 </h1>
-                <button className={`place-card__bookmark-button ${isFavorite ? 'place-card__bookmark-button--active' : ''} button`} type="button">
+                <button className={`place-card__bookmark-button ${isFavorite ? 'place-card__bookmark-button--active' : ''} button`} type="button" onClick={handleBookmarkClick}>
                   <svg className="offer__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>

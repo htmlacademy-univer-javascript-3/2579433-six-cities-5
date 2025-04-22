@@ -56,3 +56,27 @@ export type PointInfo = {
   id: string;
   location: OfferLocation;
 }
+
+export type FavoritePointInfo = {
+  id: string;
+  title: string;
+  type: string;
+  price: number;
+  city: OfferCity;
+  location: OfferLocation;
+  isFavorite: boolean;
+  isPremium: boolean;
+  rating: number;
+  previewImage: string;
+  description: string;
+  bedrooms: number;
+  goods: string[];
+  host: HostInfo;
+  images: string[];
+  maxAdults: number;
+  }
+
+export type StatusChangeRequest = {
+  offerId: string;
+  status: number;
+}

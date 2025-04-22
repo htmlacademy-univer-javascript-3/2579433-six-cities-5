@@ -21,7 +21,14 @@ export type MainPageData = {
 export type OfferPageData = {
   isLoading: boolean;
   oldOfferId: string | null;
+  isFavorite: boolean;
   currentOffer: FullOfferInfo | null;
   nearPlaces: OfferInfo[];
   comments: CommentInfo[];
+}
+
+export type FavoritePageData = {
+  isLoading: boolean;
+  favoriteOfferList: OfferInfo[];
+  favoriteOfferCount: number;
 }

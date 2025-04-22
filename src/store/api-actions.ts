@@ -2,7 +2,7 @@ import { AxiosInstance, isAxiosError} from 'axios';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {AppDispatch, State} from '../types/state';
 import { UserData, AuthData } from '../types/userdata';
-import { OfferInfo, FullOfferInfo } from '../types/offer';
+import { OfferInfo, FullOfferInfo, StatusChangeRequest, FavoritePointInfo } from '../types/offer';
 import { redirectTo } from './action';
 import { APIRoute, AppRoute } from '../const';
 import { saveToken, dropToken } from '../service/token';
@@ -124,5 +124,29 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   async (_arg, {extra: {api}}) => {
     await api.delete(APIRoute.Logout);
     dropToken();
+  },
+);
+
+export const fetchFavoriteOffersAction = createAsyncThunk<OfferInfo[], undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: { api: AxiosInstance };
+}>(
+  'FETCH_FAVORITE',
+  async (_arg, {extra: {api}}) => {
+    const {data} = await api.get<OfferInfo[]>(APIRoute.Favorites);
+    return data;
+  }
+);
+
+export const changeOfferStatus = createAsyncThunk<FavoritePointInfo, StatusChangeRequest, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: { api: AxiosInstance };
+}>(
+  'CHANGE_STATUS',
+  async ({offerId, status}, {extra: {api}}) => {
+    const {data} = await api.post<FavoritePointInfo>(`${APIRoute.Favorites}/${offerId}/${status}`);
+    return data;
   },
 );
