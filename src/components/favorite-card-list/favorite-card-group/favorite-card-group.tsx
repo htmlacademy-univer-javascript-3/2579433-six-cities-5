@@ -39,16 +39,13 @@ function FavoriteCardGroup({city, currentFavoriteOffers}: CardGroupProps): JSX.E
         </div>
       </div>
       <div className="favorites__places">
-        {currentFavoriteOffers.map((offer) => {
-          const shortCardInfo = {id: offer.id, title: offer.title, type: offer.type, price: offer.price, rating: offer.rating, isFavorite: offer.isFavorite};
-
-          return (
-            <CardWrapper key={`${offer.id}-card`} display={Display.FAVORITE} id={offer.id}>
-              <CardLabel isPremium={offer.isPremium}/>
-              <CardImage display={Display.FAVORITE} offerID={offer.id} previewImage={offer.previewImage}/>
-              <CardInfo display={Display.FAVORITE} shortCardInfo={shortCardInfo} toggleFavorite={toggleFavorite}/>
-            </CardWrapper>);
-        })}
+        {currentFavoriteOffers.map((offer) => (
+          <CardWrapper key={`${offer.id}-card`} display={Display.FAVORITE} id={offer.id}>
+            <CardLabel isPremium={offer.isPremium}/>
+            <CardImage display={Display.FAVORITE} offerID={offer.id} previewImage={offer.previewImage}/>
+            <CardInfo display={Display.FAVORITE} shortCardInfo={offer} toggleFavorite={toggleFavorite}/>
+          </CardWrapper>)
+        )}
       </div>
     </li>
   );

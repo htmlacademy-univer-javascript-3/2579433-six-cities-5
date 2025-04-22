@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {NameSpace} from '../../const';
+import {APIScenarios} from '../../const';
 import { FavoritePageData } from '../../types/state';
 import { fetchFavoriteOffersAction, changeOfferStatus } from '../api-actions';
 import { OfferInfo } from '../../types/offer';
@@ -11,7 +11,7 @@ const initialState: FavoritePageData = {
 };
 
 export const favoritePageData = createSlice({
-  name: NameSpace.Favorite,
+  name: APIScenarios.Favorite,
   initialState,
   reducers: {
     addToFavorites: (state, action: PayloadAction<OfferInfo>) => {

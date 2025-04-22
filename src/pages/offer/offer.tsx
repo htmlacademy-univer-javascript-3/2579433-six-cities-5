@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { Display, AuthorizationStatus } from '../../const.ts';
-import { useParams } from 'react-router-dom';
+import { Display, AuthorizationStatus, AppRoute } from '../../const.ts';
+import { useParams, useNavigate } from 'react-router-dom';
 import Map from '../../components/map/map.tsx';
 import CardList from '../../components/card-list/card-list.tsx';
 import CommentForm from '../../components/comment/comment-form/comment-form.tsx';
@@ -23,11 +23,16 @@ function Offer(): JSX.Element {
   const oldOfferId = useAppSelector(getOldOfferId);
   const isFavorite = useAppSelector(getFavoriteStatus);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleBookmarkClick = () => {
     if(offerId){
-      dispatch(changeOfferStatus({offerId: offerId, status: Number(!isFavorite)}));
-      dispatch(changeFavoriteStatus(!isFavorite));
+      if(authStatus !== AuthorizationStatus.Auth){
+        navigate(AppRoute.Main);
+      }else{
+        dispatch(changeOfferStatus({offerId: offerId, status: Number(!isFavorite)}));
+        dispatch(changeFavoriteStatus(!isFavorite));
+      }
     }
   };
 

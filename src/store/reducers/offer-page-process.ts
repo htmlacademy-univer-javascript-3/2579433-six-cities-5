@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {NameSpace} from '../../const';
+import {APIScenarios} from '../../const';
 import { OfferPageData } from '../../types/state';
 import { fetchCurrentOfferAction, fetchNearbyAction, fetchCommentsAction, postComment } from '../api-actions';
 
@@ -13,7 +13,7 @@ const initialState: OfferPageData = {
 };
 
 export const offerPageData = createSlice({
-  name: NameSpace.Offer,
+  name: APIScenarios.Offer,
   initialState,
   reducers: {
     setOldOfferId: (state, action: PayloadAction<string>) => {

@@ -1,8 +1,8 @@
 import { createSelector } from '@reduxjs/toolkit';
-import {NameSpace} from '../../const';
+import {APIScenarios} from '../../const';
 import {State} from '../../types/state';
 
-const getOfferState = (state: State) => state[NameSpace.Offer];
+const getOfferState = (state: State) => state[APIScenarios.Offer];
 
 export const getOfferBundle = createSelector(
   [getOfferState],
@@ -12,6 +12,6 @@ export const getOfferBundle = createSelector(
     nearOffersInfo: offerState.nearPlaces
   }));
 
-export const getLoadingStatus = (state: State): boolean => state[NameSpace.Offer].isLoading;
-export const getOldOfferId = (state: State): string | null => state[NameSpace.Offer].oldOfferId;
-export const getFavoriteStatus = (state: State): boolean => state[NameSpace.Offer].isFavorite;
+export const getLoadingStatus = (state: State): boolean => state[APIScenarios.Offer].isLoading;
+export const getOldOfferId = (state: State): string | null => state[APIScenarios.Offer].oldOfferId;
+export const getFavoriteStatus = (state: State): boolean => state[APIScenarios.Offer].isFavorite;

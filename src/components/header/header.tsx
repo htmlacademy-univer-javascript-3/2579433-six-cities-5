@@ -29,7 +29,7 @@ function Header({isActive}: HeaderProps): JSX.Element {
   useEffect(() => {
     dispatch(checkAuthAction());
     if(authStatus === AuthorizationStatus.Auth || favoriteOfferCount === -1){
-      dispatch(fetchFavoriteOffersAction);
+      dispatch(fetchFavoriteOffersAction());
     }
   }, [dispatch, authStatus, favoriteOfferCount]);
 
