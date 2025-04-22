@@ -31,16 +31,12 @@ function CardList({display, offers, onPointChange}: CardListProps): JSX.Element 
 
   return (
     <div className="cities__places-list places__list tabs__content">
-      {offers.map((offer) => {
-        const shortCardInfo = {id: offer.id, title: offer.title, type: offer.type, price: offer.price, rating: offer.rating, isFavorite: offer.isFavorite};
-
-        return (
-          <CardWrapper key={`${offer.id}-card`} display={display} id={offer.id} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
-            <CardLabel isPremium={offer.isPremium}/>
-            <CardImage display={display} offerID={offer.id} previewImage={offer.previewImage}/>
-            <CardInfo display={display} shortCardInfo={shortCardInfo} toggleFavorite={toggleFavorite}/>
-          </CardWrapper>);
-      })}
+      {offers.map((offer) => (
+        <CardWrapper key={`${offer.id}-card`} display={display} id={offer.id} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+          <CardLabel isPremium={offer.isPremium}/>
+          <CardImage display={display} offerID={offer.id} previewImage={offer.previewImage}/>
+          <CardInfo display={display} shortCardInfo={offer} toggleFavorite={toggleFavorite}/>
+        </CardWrapper>))}
     </div>
   );
 }
