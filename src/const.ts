@@ -19,7 +19,7 @@ export enum APIRoute {
   Logout = '/logout'
 }
 
-export enum NameSpace {
+export enum APIScenarios {
   Main = 'MAIN',
   Offer = 'OFFER',
   Auth = 'AUTH'

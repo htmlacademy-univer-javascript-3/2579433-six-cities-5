@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {NameSpace} from '../../const';
+import {APIScenarios} from '../../const';
 import { MainPageData } from '../../types/state';
 import {fetchOffersAction} from '../api-actions';
 
@@ -10,7 +10,7 @@ const initialState: MainPageData = {
 };
 
 export const mainPageData = createSlice({
-  name: NameSpace.Main,
+  name: APIScenarios.Main,
   initialState,
   reducers: {
     changeCity: (state, action: PayloadAction<string>) => {
