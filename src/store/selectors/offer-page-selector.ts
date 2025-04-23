@@ -14,4 +14,3 @@ export const getOfferBundle = createSelector(
 
 export const getLoadingStatus = (state: State): boolean => state[APIScenarios.Offer].isLoading;
 export const getOldOfferId = (state: State): string | null => state[APIScenarios.Offer].oldOfferId;
-export const getFavoriteStatus = (state: State): boolean => state[APIScenarios.Offer].isFavorite;

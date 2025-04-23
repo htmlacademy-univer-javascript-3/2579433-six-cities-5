@@ -47,13 +47,16 @@ export const favoritePageData = createSlice({
         toast.warn(action.payload);
       })
       .addCase(changeOfferStatus.fulfilled, (state, action) => {
-        const {id, title, type, price, city, location, isFavorite, isPremium, rating, previewImage} = action.payload;
-
-        const index = state.favoriteOfferList.findIndex((offer) => offer.id === id);
-        if(index === -1 && isFavorite === true){
-          const offerListFormat = {id, title, type, price, city, location, isFavorite, isPremium, rating, previewImage};
+        const index = state.favoriteOfferList.findIndex((offer) => offer.id === action.payload.id);
+        if(index === -1 && action.payload.isFavorite === true){
+          const offerListFormat =
+          {id: action.payload.id, title: action.payload.title,
+            type: action.payload.type, price: action.payload.price,
+            city: action.payload.city, location: action.payload.location,
+            isFavorite: action.payload.isFavorite, isPremium: action.payload.isPremium,
+            rating: action.payload.rating, previewImage: action.payload.previewImage};
           state.favoriteOfferList.push(offerListFormat);
-        }else{
+        }else if(!action.payload.isFavorite && index !== -1){
           state.favoriteOfferList.splice(index, 1);
         }
       })

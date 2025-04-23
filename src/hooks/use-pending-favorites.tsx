@@ -17,9 +17,8 @@ export function usePendingFavorites() {
       pendingFavorites.current.set(id, newStatus);
     }
 
-    // Немедленное локальное обновление списка
     if (newStatus) {
-      dispatch(addToFavorites(offer));
+      dispatch(addToFavorites({...structuredClone(offer), isFavorite: newStatus}));
     } else {
       dispatch(removeFromFavorites(offer.id));
     }

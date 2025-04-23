@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 const initialState: OfferPageData = {
   isLoading: false,
   oldOfferId: null,
-  isFavorite: false,
   currentOffer: null,
   nearPlaces: [],
   comments: []
@@ -19,9 +18,6 @@ export const offerPageData = createSlice({
   reducers: {
     setOldOfferId: (state, action: PayloadAction<string>) => {
       state.oldOfferId = action.payload;
-    },
-    changeFavoriteStatus: (state, action: PayloadAction<boolean>) => {
-      state.isFavorite = action.payload;
     }
   },
   extraReducers(builder) {
@@ -31,7 +27,6 @@ export const offerPageData = createSlice({
       })
       .addCase(fetchCurrentOfferAction.fulfilled, (state, action) => {
         state.currentOffer = action.payload;
-        state.isFavorite = action.payload.isFavorite;
         state.isLoading = false;
       })
       .addCase(fetchCurrentOfferAction.rejected, (state, action) => {
@@ -69,4 +64,4 @@ export const offerPageData = createSlice({
   }
 });
 
-export const { setOldOfferId, changeFavoriteStatus } = offerPageData.actions;
+export const { setOldOfferId } = offerPageData.actions;

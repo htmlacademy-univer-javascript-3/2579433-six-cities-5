@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {APIScenarios} from '../../const';
 import { MainPageData } from '../../types/state';
-import {fetchOffersAction} from '../api-actions';
+import {changeOfferStatus, fetchOffersAction} from '../api-actions';
 
 const initialState: MainPageData = {
   city: 'Paris',
@@ -28,6 +28,12 @@ export const mainPageData = createSlice({
       })
       .addCase(fetchOffersAction.rejected, (state) => {
         state.isLoading = false;
+      })
+      .addCase(changeOfferStatus.fulfilled, (state, action) => {
+        const index = state.offerList.findIndex((offer) => offer.id === action.payload.id);
+        if(index !== -1){
+          state.offerList[index].isFavorite = action.payload.isFavorite;
+        }
       });
   }
 });
