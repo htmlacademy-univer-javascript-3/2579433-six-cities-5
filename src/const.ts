@@ -28,8 +28,7 @@ export enum APIScenarios {
 
 export enum AuthorizationStatus {
   Auth = 'AUTH',
-  NoAuth = 'NO_AUTH',
-  Unknown = 'UNKNOWN',
+  NoAuth = 'NO_AUTH'
 }
 
 export enum Display {

@@ -3,6 +3,7 @@ import {APIScenarios} from '../../const';
 import { FavoritePageData } from '../../types/state';
 import { fetchFavoriteOffersAction, changeOfferStatus } from '../api-actions';
 import { OfferInfo } from '../../types/offer';
+import { toast } from 'react-toastify';
 
 const initialState: FavoritePageData = {
   isLoading: false,
@@ -41,8 +42,9 @@ export const favoritePageData = createSlice({
         state.favoriteOfferCount = action.payload.length;
         state.isLoading = false;
       })
-      .addCase(fetchFavoriteOffersAction.rejected, (state) => {
+      .addCase(fetchFavoriteOffersAction.rejected, (state, action) => {
         state.isLoading = false;
+        toast.warn(action.payload);
       })
       .addCase(changeOfferStatus.fulfilled, (state, action) => {
         const {id, title, type, price, city, location, isFavorite, isPremium, rating, previewImage} = action.payload;
@@ -54,6 +56,9 @@ export const favoritePageData = createSlice({
         }else{
           state.favoriteOfferList.splice(index, 1);
         }
+      })
+      .addCase(changeOfferStatus.rejected, (_, action) => {
+        toast.warn(action.payload);
       });
   }
 });

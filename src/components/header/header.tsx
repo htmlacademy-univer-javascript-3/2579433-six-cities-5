@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../../store/store';
 import { getAuthorizationStatus, getUserData } from '../../store/selectors/authentication-selector';
 import { getFavoriteOfferCount } from '../../store/selectors/favorite-page-selector';
-import { fetchFavoriteOffersAction, logoutAction, checkAuthAction } from '../../store/api-actions';
+import { fetchFavoriteOffersAction, logoutAction } from '../../store/api-actions';
 
 type HeaderProps = {
   isActive: boolean;
@@ -27,8 +27,7 @@ function Header({isActive}: HeaderProps): JSX.Element {
   };
 
   useEffect(() => {
-    dispatch(checkAuthAction());
-    if(authStatus === AuthorizationStatus.Auth || favoriteOfferCount === -1){
+    if(authStatus === AuthorizationStatus.Auth && favoriteOfferCount === -1){
       dispatch(fetchFavoriteOffersAction());
     }
   }, [dispatch, authStatus, favoriteOfferCount]);

@@ -3,11 +3,18 @@ import Header from '../../components/header/header';
 import FavoritesEmptyList from '../../components/favorite-card-list/favorite-empty-list/favorite-empty-list';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
-import { useAppSelector } from '../../store/store';
+import { useAppSelector, useAppDispatch } from '../../store/store';
 import { getFavoriteOfferList } from '../../store/selectors/favorite-page-selector';
+import { useEffect } from 'react';
+import { checkAuthAction } from '../../store/api-actions';
 
 function Favorites(): JSX.Element {
   const favoriteOfferList = useAppSelector(getFavoriteOfferList);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(checkAuthAction());
+  }, [dispatch]);
 
   return (
     <div className="page">

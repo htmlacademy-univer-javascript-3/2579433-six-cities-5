@@ -2,8 +2,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { AppRoute, AuthorizationStatus, Display } from '../../../const';
 import { OfferInfo } from '../../../types/offer';
-import { useAppSelector } from '../../../store/store';
+import { useAppSelector, useAppDispatch } from '../../../store/store';
 import { getAuthorizationStatus } from '../../../store/selectors/authentication-selector';
+import { checkAuthAction } from '../../../store/api-actions';
 
 type CardInfoProps = {
   display: Display;
@@ -16,11 +17,13 @@ function CardInfo({display, shortCardInfo, toggleFavorite}: CardInfoProps): JSX.
   const {id, title, type, price, rating} = shortCardInfo;
   const cardClass = display === Display.FAVORITE && `${display}__card-info `;
   const authStatus = useAppSelector(getAuthorizationStatus);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleBookmarkClick = () => {
+    dispatch(checkAuthAction());
     if(authStatus !== AuthorizationStatus.Auth){
-      navigate(AppRoute.Main);
+      navigate(AppRoute.Login);
     }else{
       const newStatus = !isFavorite;
       setIsFavorite(newStatus);

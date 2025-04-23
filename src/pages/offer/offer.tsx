@@ -12,7 +12,7 @@ import { useAppSelector, useAppDispatch } from '../../store/store.ts';
 import { getAuthorizationStatus } from '../../store/selectors/authentication-selector.ts';
 import { getLoadingStatus, getOldOfferId, getOfferBundle, getFavoriteStatus } from '../../store/selectors/offer-page-selector.ts';
 import { setOldOfferId, changeFavoriteStatus } from '../../store/reducers/offer-page-process.ts';
-import { fetchCurrentOfferAction, fetchCommentsAction, fetchNearbyAction, changeOfferStatus } from '../../store/api-actions.ts';
+import { fetchCurrentOfferAction, fetchCommentsAction, fetchNearbyAction, changeOfferStatus, checkAuthAction } from '../../store/api-actions.ts';
 
 function Offer(): JSX.Element {
   const { offerId } = useParams<{ offerId: string }>();
@@ -27,8 +27,9 @@ function Offer(): JSX.Element {
 
   const handleBookmarkClick = () => {
     if(offerId){
+      dispatch(checkAuthAction());
       if(authStatus !== AuthorizationStatus.Auth){
-        navigate(AppRoute.Main);
+        navigate(AppRoute.Login);
       }else{
         dispatch(changeOfferStatus({offerId: offerId, status: Number(!isFavorite)}));
         dispatch(changeFavoriteStatus(!isFavorite));
@@ -45,7 +46,7 @@ function Offer(): JSX.Element {
     }
   }, [dispatch, offerId, oldOfferId]);
 
-  if(!offer || isLoading || authStatus === AuthorizationStatus.Unknown){
+  if(!offer || isLoading){
     return(
       <div className="page">
         <Header isActive={false}/>
