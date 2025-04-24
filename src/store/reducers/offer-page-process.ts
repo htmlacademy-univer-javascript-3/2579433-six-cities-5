@@ -2,6 +2,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {APIScenarios} from '../../const';
 import { OfferPageData } from '../../types/state';
 import { fetchCurrentOfferAction, fetchNearbyAction, fetchCommentsAction, postComment } from '../api-actions';
+import { toast } from 'react-toastify';
 
 const initialState: OfferPageData = {
   isLoading: false,
@@ -28,8 +29,9 @@ export const offerPageData = createSlice({
         state.currentOffer = action.payload;
         state.isLoading = false;
       })
-      .addCase(fetchCurrentOfferAction.rejected, (state) => {
+      .addCase(fetchCurrentOfferAction.rejected, (state, action) => {
         state.isLoading = false;
+        toast.warn(action.payload);
       })
       .addCase(fetchNearbyAction.pending, (state) => {
         state.isLoading = true;
@@ -38,8 +40,9 @@ export const offerPageData = createSlice({
         state.nearPlaces = action.payload;
         state.isLoading = false;
       })
-      .addCase(fetchNearbyAction.rejected, (state) => {
+      .addCase(fetchNearbyAction.rejected, (state, action) => {
         state.isLoading = false;
+        toast.warn(action.payload);
       })
       .addCase(fetchCommentsAction.pending, (state) => {
         state.isLoading = true;
@@ -48,11 +51,15 @@ export const offerPageData = createSlice({
         state.comments = action.payload;
         state.isLoading = false;
       })
-      .addCase(fetchCommentsAction.rejected, (state) => {
+      .addCase(fetchCommentsAction.rejected, (state, action) => {
         state.isLoading = false;
+        toast.warn(action.payload);
       })
       .addCase(postComment.fulfilled, (state, action) => {
         state.comments.push(action.payload);
+      })
+      .addCase(postComment.rejected, (_, action) => {
+        toast.warn(action.payload);
       });
   }
 });

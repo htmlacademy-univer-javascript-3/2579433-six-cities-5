@@ -25,3 +25,9 @@ export type OfferPageData = {
   nearPlaces: OfferInfo[];
   comments: CommentInfo[];
 }
+
+export type FavoritePageData = {
+  isLoading: boolean;
+  favoriteOfferList: OfferInfo[];
+  favoriteOfferCount: number;
+}

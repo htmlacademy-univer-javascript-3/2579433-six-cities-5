@@ -1,28 +1,34 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { AppRoute, Display } from '../../../const';
-
-type ShortCardInfo = {
-  id: string;
-  title: string;
-  type: string;
-  price: number;
-  rating: number;
-  isFavorite: boolean;
-}
+import { AppRoute, AuthorizationStatus, Display } from '../../../const';
+import { OfferInfo } from '../../../types/offer';
+import { useAppSelector, useAppDispatch } from '../../../store/store';
+import { getAuthorizationStatus } from '../../../store/selectors/authentication-selector';
+import { checkAuthAction } from '../../../store/api-actions';
 
 type CardInfoProps = {
   display: Display;
-  shortCardInfo: ShortCardInfo;
+  shortCardInfo: OfferInfo;
+  toggleFavorite: (offer: OfferInfo, newStatus: boolean, nitialStatus: boolean) => void;
 }
 
-function CardInfo({display, shortCardInfo}: CardInfoProps): JSX.Element {
+function CardInfo({display, shortCardInfo, toggleFavorite}: CardInfoProps): JSX.Element {
   const [isFavorite, setIsFavorite] = useState(shortCardInfo.isFavorite);
   const {id, title, type, price, rating} = shortCardInfo;
   const cardClass = display === Display.FAVORITE && `${display}__card-info `;
+  const authStatus = useAppSelector(getAuthorizationStatus);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleBookmarkClick = () => {
-    setIsFavorite((currentState) => !currentState);
+    dispatch(checkAuthAction());
+    if(authStatus !== AuthorizationStatus.Auth){
+      navigate(AppRoute.Login);
+    }else{
+      const newStatus = !isFavorite;
+      setIsFavorite(newStatus);
+      toggleFavorite(shortCardInfo, newStatus, shortCardInfo.isFavorite);
+    }
   };
 
   return(

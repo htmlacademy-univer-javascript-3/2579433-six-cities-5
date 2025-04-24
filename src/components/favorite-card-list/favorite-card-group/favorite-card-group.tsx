@@ -1,10 +1,14 @@
 import { OfferInfo } from '../../../types/offer';
-import { Display } from '../../../const';
+import { Display, AppRoute } from '../../../const';
 import CardWrapper from '../../card/wrapper/card-wrapper';
 import CardLabel from '../../card/label/card-label';
 import CardImage from '../../card/image/card-image';
 import CardInfo from '../../card/info/card-info';
-
+import { Link } from 'react-router-dom';
+import { changeCity } from '../../../store/reducers/main-page-process';
+import { useAppDispatch } from '../../../store/store';
+import { useEffect } from 'react';
+import { usePendingFavorites } from '../../../hooks/use-pending-favorites';
 
 type CardGroupProps = {
   city: string;
@@ -12,26 +16,36 @@ type CardGroupProps = {
 }
 
 function FavoriteCardGroup({city, currentFavoriteOffers}: CardGroupProps): JSX.Element{
+  const dispatch = useAppDispatch();
+  const {toggleFavorite, flushFavorites} = usePendingFavorites();
+
+  useEffect(() => () => {
+    flushFavorites();
+  }, [flushFavorites]);
+
+  const handleLinkClick = (evt: React.MouseEvent<HTMLAnchorElement>) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    dispatch(changeCity(city));
+  };
+
   return (
     <li className="favorites__locations-items">
       <div className="favorites__locations locations locations--current">
         <div className="locations__item">
-          <a className="locations__item-link" href="#">
+          <Link className="locations__item-link" to={AppRoute.Main} onClick={handleLinkClick}>
             <span>{city}</span>
-          </a>
+          </Link>
         </div>
       </div>
       <div className="favorites__places">
-        {currentFavoriteOffers.map((offer) => {
-          const shortCardInfo = {id: offer.id, title: offer.title, type: offer.type, price: offer.price, rating: offer.rating, isFavorite: offer.isFavorite};
-
-          return (
-            <CardWrapper key={`${offer.id}-card`} display={Display.FAVORITE} id={offer.id}>
-              <CardLabel isPremium={offer.isPremium}/>
-              <CardImage display={Display.FAVORITE} offerID={offer.id} previewImage={offer.previewImage}/>
-              <CardInfo display={Display.FAVORITE} shortCardInfo={shortCardInfo}/>
-            </CardWrapper>);
-        })}
+        {currentFavoriteOffers.map((offer) => (
+          <CardWrapper key={`${offer.id}-card`} display={Display.FAVORITE} id={offer.id}>
+            <CardLabel isPremium={offer.isPremium}/>
+            <CardImage display={Display.FAVORITE} offerID={offer.id} previewImage={offer.previewImage}/>
+            <CardInfo display={Display.FAVORITE} shortCardInfo={offer} toggleFavorite={toggleFavorite}/>
+          </CardWrapper>)
+        )}
       </div>
     </li>
   );

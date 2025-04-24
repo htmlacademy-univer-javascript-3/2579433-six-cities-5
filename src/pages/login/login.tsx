@@ -3,9 +3,10 @@ import { AppRoute, AuthorizationStatus, CITIES } from '../../const';
 import { FormEvent, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { getAuthorizationStatus } from '../../store/selectors/authentication-selector';
-import { loginAction } from '../../store/api-actions';
+import { checkAuthAction, loginAction } from '../../store/api-actions';
 import { toast } from 'react-toastify';
 import { changeCity } from '../../store/reducers/main-page-process';
+import { useEffect } from 'react';
 
 function Login(): JSX.Element {
   const city = Math.floor(Math.random() * 6);
@@ -14,10 +15,6 @@ function Login(): JSX.Element {
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  if(authStatus === AuthorizationStatus.Auth){
-    navigate(AppRoute.Main);
-  }
 
   const handleLinkClick = (evt: React.MouseEvent<HTMLAnchorElement>) => {
     evt.preventDefault();
@@ -41,6 +38,13 @@ function Login(): JSX.Element {
       }
     }
   };
+
+  useEffect(() => {
+    dispatch(checkAuthAction());
+    if(authStatus === AuthorizationStatus.Auth){
+      navigate(AppRoute.Main);
+    }
+  }, [dispatch, authStatus, navigate]);
 
   return (
     <div className="page page--gray page--login">

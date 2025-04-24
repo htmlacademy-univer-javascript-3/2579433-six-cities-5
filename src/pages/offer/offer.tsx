@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import { Display, AuthorizationStatus } from '../../const.ts';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Display, AuthorizationStatus, AppRoute } from '../../const.ts';
+import { useParams, useNavigate } from 'react-router-dom';
 import Map from '../../components/map/map.tsx';
 import CardList from '../../components/card-list/card-list.tsx';
 import CommentForm from '../../components/comment/comment-form/comment-form.tsx';
@@ -12,16 +12,19 @@ import { useAppSelector, useAppDispatch } from '../../store/store.ts';
 import { getAuthorizationStatus } from '../../store/selectors/authentication-selector.ts';
 import { getLoadingStatus, getOldOfferId, getOfferBundle } from '../../store/selectors/offer-page-selector.ts';
 import { setOldOfferId } from '../../store/reducers/offer-page-process.ts';
-import { fetchCurrentOfferAction, fetchCommentsAction, fetchNearbyAction } from '../../store/api-actions.ts';
+import { fetchCurrentOfferAction, fetchCommentsAction, fetchNearbyAction, changeOfferStatus, checkAuthAction } from '../../store/api-actions.ts';
+import { addToFavorites, removeFromFavorites } from '../../store/reducers/favorite-page-process.ts';
 
 function Offer(): JSX.Element {
   const { offerId } = useParams<{ offerId: string }>();
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const isLoading = useAppSelector(getLoadingStatus);
   const authStatus = useAppSelector(getAuthorizationStatus);
   const {offer, comments, nearOffersInfo} = useAppSelector(getOfferBundle);
   const oldOfferId = useAppSelector(getOldOfferId);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if(offerId && oldOfferId !== offerId){
@@ -30,9 +33,17 @@ function Offer(): JSX.Element {
       dispatch(fetchCommentsAction(offerId));
       dispatch(setOldOfferId(offerId));
     }
-  }, [dispatch, offerId, oldOfferId]);
+    if(offer){
+      setIsFavorite(offer.isFavorite);
+    }
+    return () => {
+      if(offer && offer.isFavorite !== isFavorite){
+        dispatch(changeOfferStatus({offerId: offer.id, status: Number(isFavorite)}));
+      }
+    };
+  }, [dispatch, offerId, oldOfferId, isFavorite, offer]);
 
-  if(!offer || isLoading || authStatus === AuthorizationStatus.Unknown){
+  if(!offer || isLoading){
     return(
       <div className="page">
         <Header isActive={false}/>
@@ -41,7 +52,23 @@ function Offer(): JSX.Element {
     );
   }
 
-  const {id, title, type, price, location, isFavorite, isPremium, rating, description, bedrooms, goods, host, images, maxAdults} = offer;
+  const handleBookmarkClick = () => {
+    dispatch(checkAuthAction());
+    if(offerId){
+      if(authStatus !== AuthorizationStatus.Auth){
+        navigate(AppRoute.Login);
+      }else{
+        if(isFavorite){
+          dispatch(removeFromFavorites(offerId));
+        }else{
+          dispatch(addToFavorites({id: offer.id, title: offer.title, type: offer.type, price: offer.price, city: offer.city, location: offer.location, isFavorite: isFavorite, isPremium: offer.isPremium, rating: offer.rating, previewImage: offer.images[0]}));
+        }
+        setIsFavorite((state) => !state);
+      }
+    }
+  };
+
+  const {id, title, type, price, location, isPremium, rating, description, bedrooms, goods, host, images, maxAdults} = offer;
   const firstThreePoints = nearOffersInfo.slice(0, 3);
   const points: PointInfo[] = firstThreePoints.map((point) => ({id: point.id, location: point.location}));
   points.push({id: id, location: location});
@@ -71,7 +98,7 @@ function Offer(): JSX.Element {
                 <h1 className="offer__name">
                   {title}
                 </h1>
-                <button className={`place-card__bookmark-button ${isFavorite ? 'place-card__bookmark-button--active' : ''} button`} type="button">
+                <button className={`place-card__bookmark-button ${isFavorite ? 'place-card__bookmark-button--active' : ''} button`} type="button" onClick={handleBookmarkClick}>
                   <svg className="offer__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>

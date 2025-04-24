@@ -22,13 +22,13 @@ export enum APIRoute {
 export enum APIScenarios {
   Main = 'MAIN',
   Offer = 'OFFER',
-  Auth = 'AUTH'
+  Auth = 'AUTH',
+  Favorite = 'FAVORITE'
 }
 
 export enum AuthorizationStatus {
   Auth = 'AUTH',
-  NoAuth = 'NO_AUTH',
-  Unknown = 'UNKNOWN',
+  NoAuth = 'NO_AUTH'
 }
 
 export enum Display {
